@@ -14,7 +14,7 @@ let sampleObj = {
   },
 };
 
-function arrayifier(ob) {
+function toArr(ob) {
   //start empty array
   let result = [];
   //look at each property: value pair
@@ -26,14 +26,14 @@ function arrayifier(ob) {
       result.push(key, ob[key]);
     } else {
       //if not push property and loop through function on next level
-      result.push([key, arrayifier(ob[key])]);
+      result.push([key, toArr(ob[key])]);
     }
   }
   return result;
 }
 
 
-console.log('arrayifier(sampleObj): ', arrayifier(sampleObj));
+console.log("toArr(sampleObj): ", toArr(sampleObj));
 /*
-!arrayifier(sampleObj):  [[ 'animals',[ 'dogs', [Array], 'dragons', [Array], 'Pigs', [Array] ]],'a-A-strikes',[ 1, 2, 3, 4, 5 ],[ 'guitars', [ 'Fender', [Array], 'Gibson', [Array] ] ]]
+!toArr(sampleObj):  [[ 'animals',[ 'dogs', [Array], 'dragons', [Array], 'Pigs', [Array] ]],'a-A-strikes',[ 1, 2, 3, 4, 5 ],[ 'guitars', [ 'Fender', [Array], 'Gibson', [Array] ] ]]
 */
