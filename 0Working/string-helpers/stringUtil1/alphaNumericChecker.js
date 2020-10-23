@@ -1,5 +1,5 @@
-//Function to test if a character is alpha numeric that is faster than a regular
-//expression in JavaScript
+/*Function to test if a character is alpha numeric that is faster than a regular
+expression in JavaScript*/
 
 let isAlphaNumeric = (char) => {
   char = char.toString();
