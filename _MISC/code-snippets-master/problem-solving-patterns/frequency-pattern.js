@@ -28,13 +28,13 @@ let frequencyCounter = (first, second) => {
 let slowFrequencyCounter = (first, second) => {
   if (first.length !== second.length) return false;
 
-  for (let i = 0; i < first.length; i++) {
-    let ele = first[i];
+  for (let ele of first) {
     let checker = second.indexOf(ele);
     if (checker === -1) {
       return false;
     }
     second.splice(checker, 1);
   }
+
   return true;
 };
