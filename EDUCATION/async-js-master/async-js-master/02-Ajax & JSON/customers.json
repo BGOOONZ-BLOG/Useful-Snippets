@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "company": "Google",
+    "phone": "+234 667776 666"
+  },
+  {
+    "id": 2,
+    "name": "John Dan",
+    "company": "Facebook",
+    "phone": "+234 67776 666"
+  },
+  {
+    "id": 3,
+    "name": "John Derk",
+    "company": "TechCrunch",
+    "phone": "+234 89767 666"
+  },
+  {
+    "id": 4,
+    "name": "John Dasrt",
+    "company": "GitHub",
+    "phone": "+234 679876 666"
+  },
+  {
+    "id": 5,
+    "name": "John Dret",
+    "company": "Docker",
+    "phone": "+234 8766 666"
+  },
+  {
+    "id": 6,
+    "name": "John Dop",
+    "company": "AWS",
+    "phone": "+234 8766 5555"
+  },
+  {
+    "id": 7,
+    "name": "John Dart",
+    "company": "Zoom",
+    "phone": "+234 456766 666"
+  },
+  {
+    "id": 8,
+    "name": "John Drake",
+    "company": "Flutterwave",
+    "phone": "+234 877866 666"
+  },
+  {
+    "id": 9,
+    "name": "John Det",
+    "company": "Andela",
+    "phone": "+234 9878766 666"
+  },
+  {
+    "id": 10,
+    "name": "John Drey",
+    "company": "Konga",
+    "phone": "+234 6666 2266"
+  }
+]

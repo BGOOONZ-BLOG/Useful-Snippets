@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "company": "Google",
+    "phone": "+234 667776 666"
+  },
+  {
+    "id": 2,
+    "name": "John Dan",
+    "company": "Facebook",
+    "phone": "+234 67776 666"
+  },
+  {
+    "id": 3,
+    "name": "John Derk",
+    "company": "TechCrunch",
+    "phone": "+234 89767 666"
+  },
+  {
+    "id": 4,
+    "name": "John Dasrt",
+    "company": "GitHub",
+    "phone": "+234 679876 666"
+  },
+  {
+    "id": 5,
+    "name": "John Dret",
+    "company": "Docker",
+    "phone": "+234 8766 666"
+  }
+]
