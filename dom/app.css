@@ -1,0 +1,21 @@
+#container {
+  width: 400px;
+  height: 400px;
+  margin-top: 20px;
+  position: relative;
+  border-radius: 10px;
+  background: yellow;
+}
+#anime {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background: red;
+}
+#mouse {
+  background-color: #d94a38;
+  width: 120px;
+  height: 20px;
+  padding: 40px;
+  border-radius: 10px;
+}
