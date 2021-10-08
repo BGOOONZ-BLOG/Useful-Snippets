@@ -117,7 +117,7 @@ class Util {
       Empty: this[isEmpty](data, type),
       Blank: this[isEmpty](data, type),
     };
-    if (elemArr.indexOf(type) > -1) {
+    if (elemArr.includes(type)) {
       type = "Element";
       types["Element"] = this[isElement](data, type);
     }
@@ -139,7 +139,7 @@ class Util {
           ? Array.prototype.slice.call(arguments)
           : arguments[1];
       for (key in args) {
-        str = str.replace(new RegExp("\\{" + key + "\\}", "gi"), args[key]);
+        str = str.replace(new RegExp(`\\{${key}\\}`, "gi"), args[key]);
       }
     }
     return str;
@@ -149,13 +149,13 @@ class Util {
   }
   includes(strVal, search) {
     if (!String.prototype.includes) {
-      return strVal.indexOf(search) > -1;
+      return strVal.includes(search);
     } else {
       return strVal.includes(search);
     }
   }
   count(str, search) {
-    let re = new RegExp("(" + search + ")", "g");
+    let re = new RegExp(`(${search})`, "g");
     let count = 0;
     try {
       count = str.match(re).length;
@@ -229,16 +229,16 @@ OmightyMagicConchShell.is( 3.2, OmightyMagicConchShell.Double ): true
 //------------------------------------------------------------------------------------------------
 console.log(
   " OmightyMagicConchShell.is( Ali + 123, OmightyMagicConchShell.String ): ",
-  OmightyMagicConchShell.is("Ali" + 123, OmightyMagicConchShell.String)
+  OmightyMagicConchShell.is(`Ali${123}`, OmightyMagicConchShell.String)
 );
 /*
  OmightyMagicConchShell.is( Ali + 123, OmightyMagicConchShell.String ): true
 */
 //------------------------------------------------------------------------------------------------
-OmightyMagicConchShell.is("Ali" + 123, OmightyMagicConchShell.String);
+OmightyMagicConchShell.is(`Ali${123}`, OmightyMagicConchShell.String);
 console.log(
   "OmightyMagicConchShell.is( Ali+ 123, OmightyMagicConchShell.String ) : ",
-  OmightyMagicConchShell.is("Ali" + 123, OmightyMagicConchShell.String)
+  OmightyMagicConchShell.is(`Ali${123}`, OmightyMagicConchShell.String)
 );
 /*
 OmightyMagicConchShell.is( Ali + 123, OmightyMagicConchShell.String ): true
@@ -247,7 +247,7 @@ OmightyMagicConchShell.is( Ali + 123, OmightyMagicConchShell.String ): true
 //OmightyMagicConchShell.is( 'Ali' + 123, OmightyMagicConchShell.String )
 console.log(
   " OmightyMagicConchShell.is(Ali + 123, OmightyMagicConchShell.String ): ",
-  OmightyMagicConchShell.is("Ali" + 123, OmightyMagicConchShell.String)
+  OmightyMagicConchShell.is(`Ali${123}`, OmightyMagicConchShell.String)
 );
 /*
 true

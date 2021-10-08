@@ -1,8 +1,9 @@
 /*Added a write file to the output for a visual aid for understanding
 how the linkage works. test.txt is the output file */
 
-const util = require("util");
-const fs = require("fs");
+import util from "util";
+
+import fs from "fs";
 
 class Node {
   constructor(val) {
