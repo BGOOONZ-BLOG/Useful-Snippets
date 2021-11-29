@@ -73,7 +73,7 @@ The row index will corespond to the source of an edge and the column index will 
 let matrix = [
 
 |       | **A**   | **B**  | **C**  | **D**  | **E**  | **F**  |
-| ----- | ------- | ------ | ------ | ------ | ------ | ------ |
+|-------|---------|--------|--------|--------|--------|--------|
 | **A** | [True,  | True,  | True,  | False, | True,  | False] |
 | **B** | [False, | True,  | False, | False, | False, | False] |
 | **C** | [False, | True,  | True,  | True,  | False, | False] |
