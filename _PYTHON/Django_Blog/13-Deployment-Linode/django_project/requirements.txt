@@ -1,4 +1,4 @@
-certifi==2018.10.15
+certifi==2018.11.29
 chardet==3.0.4
 Django==2.2.24
 django-crispy-forms==1.7.2
