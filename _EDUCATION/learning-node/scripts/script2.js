@@ -1,5 +1,5 @@
 const largeNumber = 345;
 
-module.exports = {
+export default {
   largeNumber: largeNumber,
 };

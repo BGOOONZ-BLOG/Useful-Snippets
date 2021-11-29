@@ -42,13 +42,13 @@ function loadCustomers(e) {
       const list = document.getElementById("customers");
 
       let output = "";
-      customers.map((customer) => {
+      customers.map(({id, name, company, phone}) => {
         output += `
         <tr>
-        <td>${customer.id}</td>
-        <td>${customer.name}</td>
-        <td>${customer.company}</td>
-        <td>${customer.phone}</td>
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${company}</td>
+        <td>${phone}</td>
         </tr>
          `;
         list.innerHTML = output;

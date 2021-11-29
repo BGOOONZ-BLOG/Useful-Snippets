@@ -28,7 +28,7 @@ function loadData() {
   //   }
   // }
 
-  xhr.onerror = function () {
+  xhr.onerror = () => {
     console.error("Request error!");
   };
 

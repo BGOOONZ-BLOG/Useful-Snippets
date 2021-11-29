@@ -2830,7 +2830,7 @@
 ## When Mocha itself throws exception, the associated `Error` will have a `code` property. Where applicable, consumers should check the `code` property instead of string-matching against the `message` property. The following table describes these error codes:---
 
 | Code                             | Description                                                  | --- |
-|----------------------------------|--------------------------------------------------------------|-----|
+| -------------------------------- | ------------------------------------------------------------ | --- |
 | ERR_MOCHA_INVALID_ARG_TYPE       | wrong type was passed for a given argument                   | --- |
 | ERR_MOCHA_INVALID_ARG_VALUE      | invalid or unsupported value was passed for a given argument | --- |
 | ERR_MOCHA_INVALID_EXCEPTION      | a falsy or otherwise underspecified exception was thrown     | --- |

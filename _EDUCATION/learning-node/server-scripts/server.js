@@ -1,9 +1,9 @@
-const http = require("http");
+import http from "http";
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(({method, url}, res) => {
   // console.log('headers', req.headers)
-  console.log("methods", req.method);
-  console.log("url", req.url);
+  console.log("methods", method);
+  console.log("url", url);
   const user = {
     id: 1,
     name: "Leanne Graham",

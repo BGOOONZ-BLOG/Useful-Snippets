@@ -39,10 +39,10 @@ function createPost(post, callback) {
 function getPosts() {
   setTimeout(() => {
     let output = "";
-    posts.map((post) => {
+    posts.map(({title, body}) => {
       output += `
-      <li>${post.title}</li>
-      <p>${post.body}</p>
+      <li>${title}</li>
+      <p>${body}</p>
       `;
     });
     document.body.innerHTML = output;

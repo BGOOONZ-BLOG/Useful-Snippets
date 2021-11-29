@@ -1,15 +1,15 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ extended: false }));
-app.get("/:id", (req, res) => {
+app.get("/:id", ({params}, res) => {
   // console.log(req.query)
   // req.body
   // console.log(req.header)
-  console.log(req.params);
+  console.log(params);
   res.status(404).send("Not Found");
 });
 

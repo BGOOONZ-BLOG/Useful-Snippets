@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 function floor() {
   fs.readFile("./input.txt", (err, data) => {

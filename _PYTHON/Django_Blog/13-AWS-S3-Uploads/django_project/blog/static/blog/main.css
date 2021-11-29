@@ -4,7 +4,12 @@ body {
   margin-top: 5rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: #444444;
 }
 
@@ -58,7 +63,7 @@ a.article-title:hover {
 .article-metadata {
   padding-bottom: 1px;
   margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
+  border-bottom: 1px solid #e3e3e3;
 }
 
 .article-metadata a:hover {

@@ -1,4 +1,4 @@
-const c = require("./script2.js");
+import c from "./script2.js";
 
 const a = c.largeNumber;
 const b = 7;

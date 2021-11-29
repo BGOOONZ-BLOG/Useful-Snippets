@@ -1,5 +1,5 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -13,8 +13,8 @@ app.get("/profile", (req, res) => {
   res.send("getting profile...");
 });
 
-app.post("/profile", (req, res) => {
-  console.log(req.body);
+app.post("/profile", ({body}, res) => {
+  console.log(body);
   const user = {
     name: "bolaji",
     age: 23,

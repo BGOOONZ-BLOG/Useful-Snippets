@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 // READ FILE
 fs.readFile("./hello.txt", (err, data) => {
