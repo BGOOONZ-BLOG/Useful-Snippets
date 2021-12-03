@@ -12,7 +12,7 @@ gunicorn==19.9.0
 idna==2.7
 jmespath==0.9.3
 Pillow==5.2.0
-psycopg2==2.7.7
+psycopg2==2.9.2
 python-dateutil==2.8.2
 pytz==2018.5
 requests==2.19.1
