@@ -4,9 +4,69 @@ A collection of snippets that might come in handy, inspired by 30 seconds of cod
 
 
 
+
+
+# CSVToArray
+
+
+Converts a comma-separated values (CSV) string to a 2D array.
+
+- Use `Array.prototype.slice()` and `Array.prototype.indexOf('\n')` to remove the first row (title row) if `omitFirstRow` is `true`.
+- Use `String.prototype.split('\n')` to create a string for each row, then `String.prototype.split(delimiter)` to separate the values in each row.
+- Omit the second argument, `delimiter`, to use a default delimiter of `','`.
+- Omit the third argument, `omitFirstRow`, to include the first row (title row) of the CSV string.
+
+```js
+const CSVToArray = (data, delimiter = ',', omitFirstRow = false) =>
+  data
+    .slice(omitFirstRow ? data.indexOf('\n') + 1 : 0)
+    .split('\n')
+    .map(v => v.split(delimiter));
+```
+
+```js
+CSVToArray('a,b\nc,d'); // [['a', 'b'], ['c', 'd']];
+CSVToArray('a;b\nc;d', ';'); // [['a', 'b'], ['c', 'd']];
+CSVToArray('col1,col2\na,b\nc,d', ',', true); // [['a', 'b'], ['c', 'd']];
+```
+
+---
+title: CSVToJSON
+---
+
+Converts a comma-separated values (CSV) string to a 2D array of objects.
+The first row of the string is used as the title row.
+
+- Use `Array.prototype.slice()` and `Array.prototype.indexOf('\n')` and `String.prototype.split(delimiter)` to separate the first row (title row) into values.
+- Use `String.prototype.split('\n')` to create a string for each row, then `Array.prototype.map()` and `String.prototype.split(delimiter)` to separate the values in each row.
+- Use `Array.prototype.reduce()` to create an object for each row's values, with the keys parsed from the title row.
+- Omit the second argument, `delimiter`, to use a default delimiter of `,`.
+
+```js
+const CSVToJSON = (data, delimiter = ',') => {
+  const titles = data.slice(0, data.indexOf('\n')).split(delimiter);
+  return data
+    .slice(data.indexOf('\n') + 1)
+    .split('\n')
+    .map(v => {
+      const values = v.split(delimiter);
+      return titles.reduce(
+        (obj, title, index) => ((obj[title] = values[index]), obj),
+        {}
+      );
+    });
+};
+```
+
+```js
+CSVToJSON('col1,col2\na,b\nc,d');
+// [{'col1': 'a', 'col2': 'b'}, {'col1': 'c', 'col2': 'd'}];
+CSVToJSON('col1;col2\na;b\nc;d', ';');
+// [{'col1': 'a', 'col2': 'b'}, {'col1': 'c', 'col2': 'd'}];
+```
+
 ---
 title: CSVToArray
-
 ---
 
 Converts a comma-separated values (CSV) string to a 2D array.
@@ -32,9 +92,6 @@ CSVToArray('col1,col2\na,b\nc,d', ',', true); // [['a', 'b'], ['c', 'd']];
 
 ---
 title: CSVToJSON
-tags: string,object,advanced
-firstSeen: 2018-06-27T21:14:24+03:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Converts a comma-separated values (CSV) string to a 2D array of objects.
@@ -71,7 +128,6 @@ CSVToJSON('col1;col2\na;b\nc;d', ';');
 
 ---
 title: HSBToRGB
-
 ---
 
 Converts a HSB color tuple to RGB format.
@@ -96,7 +152,6 @@ HSBToRGB(18, 81, 99); // [252.45, 109.31084999999996, 47.965499999999984]
 
 ---
 title: HSLToRGB
-
 ---
 
 Converts a HSL color tuple to RGB format.
@@ -123,9 +178,6 @@ HSLToRGB(13, 100, 11); // [56.1, 12.155, 0]
 
 ---
 title: JSONToFile
-tags: node,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-20T23:02:01+03:00
 ---
 
 Writes a JSON object to a file.
@@ -146,7 +198,6 @@ JSONToFile({ test: 'is passed' }, 'testJsonFile');
 
 ---
 title: JSONtoCSV
-
 ---
 
 Converts an array of objects to a comma-separated values (CSV) string that contains only the `columns` specified.
@@ -184,9 +235,6 @@ JSONtoCSV(
 
 ---
 title: RGBToHSB
-tags: math,intermediate
-firstSeen: 2020-09-18T14:25:07+03:00
-lastUpdated: 2020-10-22T20:24:30+03:00
 ---
 
 Converts a RGB color tuple to HSB format.
@@ -215,9 +263,6 @@ RGBToHSB(252, 111, 48);
 
 ---
 title: RGBToHSL
-tags: math,intermediate
-firstSeen: 2020-10-01T23:16:30+03:00
-lastUpdated: 2020-10-04T11:25:12+03:00
 ---
 
 Converts a RGB color tuple to HSL format.
@@ -254,9 +299,6 @@ RGBToHSL(45, 23, 11); // [21.17647, 60.71428, 10.98039]
 
 ---
 title: RGBToHex
-tags: string,math,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Converts the values of RGB components to a hexadecimal color code.
@@ -275,7 +317,6 @@ RGBToHex(255, 165, 1); // 'ffa501'
 
 ---
 title: URLJoin
-
 ---
 
 Joins all given URL segments together, then normalizes the resulting URL.
@@ -302,9 +343,6 @@ URLJoin('http://www.google.com', 'a', '/b/cd', '?foo=123', '?bar=foo');
 
 ---
 title: UUIDGeneratorBrowser
-tags: browser,random,intermediate
-firstSeen: 2017-12-29T09:47:10+02:00
-lastUpdated: 2020-10-22T20:24:44+03:00
 ---
 
 Generates a UUID in a browser.
@@ -328,7 +366,6 @@ UUIDGeneratorBrowser(); // '7982fcfe-5721-4632-bede-6000885be57d'
 
 ---
 title: UUIDGeneratorNode
-
 ---
 
 Generates a UUID in Node.JS.
@@ -351,9 +388,6 @@ UUIDGeneratorNode(); // '79c7c136-60ee-40a2-beb2-856f1feabefc'
 
 ---
 title: accumulate
-tags: math,array,intermediate
-firstSeen: 2020-05-04T12:20:46+03:00
-lastUpdated: 2020-11-03T21:46:13+02:00
 ---
 
 Creates an array of partial sums.
@@ -373,9 +407,6 @@ accumulate(...[1, 2, 3, 4]); // [1, 3, 6, 10]
 
 ---
 title: addClass
-tags: browser,beginner
-firstSeen: 2020-12-30T19:21:15+02:00
-lastUpdated: 2020-12-30T19:21:15+02:00
 ---
 
 Adds a class to an HTML element.
@@ -393,9 +424,6 @@ addClass(document.querySelector('p'), 'special');
 
 ---
 title: addDaysToDate
-tags: date,intermediate
-firstSeen: 2020-10-12T03:03:18+03:00
-lastUpdated: 2020-11-28T19:18:29+02:00
 ---
 
 Calculates the date of `n` days from the given date, returning its string representation.
@@ -419,9 +447,6 @@ addDaysToDate('2020-10-15', -10); // '2020-10-05'
 
 ---
 title: addEventListenerAll
-tags: browser,event,intermediate
-firstSeen: 2021-04-22T08:53:29+03:00
-lastUpdated: 2021-04-22T08:53:29+03:00
 ---
 
 Attaches an event listener to all the provided targets.
@@ -445,9 +470,6 @@ addEventListenerAll(document.querySelectorAll('a'), 'click', () =>
 
 ---
 title: addMinutesToDate
-tags: date,intermediate
-firstSeen: 2020-11-28T19:27:46+02:00
-lastUpdated: 2020-11-28T19:27:46+02:00
 ---
 
 Calculates the date of `n` minutes from the given date, returning its string representation.
@@ -472,9 +494,6 @@ addMinutesToDate('2020-10-19', -10); // '2020-10-18 23:50:00'
 
 ---
 title: addMultipleListeners
-tags: browser,event,intermediate
-firstSeen: 2020-10-08T00:40:30+03:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Adds multiple event listeners with the same handler to an element.
@@ -499,9 +518,6 @@ addMultipleListeners(
 
 ---
 title: addStyles
-tags: browser,beginner
-firstSeen: 2021-01-07T00:37:43+02:00
-lastUpdated: 2021-01-07T00:37:43+02:00
 ---
 
 Adds the provided styles to the given element.
@@ -522,9 +538,6 @@ addStyles(document.getElementById('my-element'), {
 
 ---
 title: addWeekDays
-tags: date,intermediate
-firstSeen: 2020-10-11T16:51:39+03:00
-lastUpdated: 2021-01-08T00:23:44+02:00
 ---
 
 Calculates the date after adding the given number of business days.
@@ -551,9 +564,6 @@ addWeekDays(new Date('Oct 12, 2020'), 5); // 'Oct 19, 2020'
 
 ---
 title: all
-tags: array,beginner
-firstSeen: 2018-02-14T11:46:15+02:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Checks if the provided predicate function returns `true` for all elements in a collection.
@@ -572,9 +582,6 @@ all([1, 2, 3]); // true
 
 ---
 title: allEqual
-tags: array,beginner
-firstSeen: 2018-08-03T00:03:08+03:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Checks if all elements in an array are equal.
@@ -593,9 +600,6 @@ allEqual([1, 1, 1, 1]); // true
 
 ---
 title: allEqualBy
-tags: array,intermediate
-firstSeen: 2020-10-19T22:14:49+03:00
-lastUpdated: 2020-10-19T22:14:49+03:00
 ---
 
 Checks if all elements in an array are equal, based on the provided mapping function.
@@ -618,9 +622,6 @@ allEqualBy([1.1, 1.3, 1.6], Math.round); // false
 
 ---
 title: allUnique
-tags: array,beginner
-firstSeen: 2020-10-19T19:47:26+03:00
-lastUpdated: 2021-01-08T00:23:44+02:00
 ---
 
 Checks if all elements in an array are unique.
@@ -639,9 +640,6 @@ allUnique([1, 1, 2, 3]); // false
 
 ---
 title: allUniqueBy
-tags: array,intermediate
-firstSeen: 2020-10-19T22:15:05+03:00
-lastUpdated: 2021-01-08T00:23:44+02:00
 ---
 
 Checks if all elements in an array are unique, based on the provided mapping function.
@@ -661,10 +659,7 @@ allUniqueBy([1.2, 2.3, 2.4], Math.round); // false
 
 ---
 title: and
-tags: math,logic,beginner
 unlisted: true
-firstSeen: 2020-05-13T11:35:31+03:00
-lastUpdated: 2021-01-04T13:04:15+02:00
 ---
 
 Checks if both arguments are `true`.
@@ -683,9 +678,6 @@ and(false, false); // false
 
 ---
 title: any
-tags: array,beginner
-firstSeen: 2018-02-14T11:46:15+02:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Checks if the provided predicate function returns `true` for at least one element in a collection.
@@ -704,9 +696,6 @@ any([0, 0, 1, 0]); // true
 
 ---
 title: aperture
-tags: array,intermediate
-firstSeen: 2020-05-13T13:25:33+03:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Creates an array of `n`-tuples of consecutive elements.
@@ -730,9 +719,6 @@ aperture(5, [1, 2, 3, 4]); // []
 
 ---
 title: approximatelyEqual
-tags: math,beginner
-firstSeen: 2018-02-14T12:47:13+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Checks if two numbers are approximately equal to each other.
@@ -751,9 +737,6 @@ approximatelyEqual(Math.PI / 2.0, 1.5708); // true
 
 ---
 title: arithmeticProgression
-tags: math,algorithm,beginner
-firstSeen: 2020-10-04T11:37:07+03:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Creates an array of numbers in the arithmetic progression, starting with the given positive integer and up to the specified limit.
@@ -771,9 +754,6 @@ arithmeticProgression(5, 25); // [5, 10, 15, 20, 25]
 
 ---
 title: arrayToCSV
-tags: array,string,intermediate
-firstSeen: 2018-06-27T20:26:43+03:00
-lastUpdated: 2020-11-03T21:55:08+02:00
 ---
 
 Converts a 2D array to a comma-separated values (CSV) string.
@@ -800,9 +780,6 @@ arrayToCSV([['a', '"b" great'], ['c', 3.1415]]);
 
 ---
 title: arrayToHTMLList
-tags: browser,array,intermediate
-firstSeen: 2020-10-08T00:02:45+03:00
-lastUpdated: 2020-10-20T11:46:23+03:00
 ---
 
 Converts the given array elements into `<li>` tags and appends them to the list of the given id.
@@ -822,9 +799,6 @@ arrayToHTMLList(['item 1', 'item 2'], 'myListID');
 
 ---
 title: ary
-tags: function,advanced
-firstSeen: 2018-01-24T13:59:54+02:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Creates a function that accepts up to `n` arguments, ignoring any additional arguments.
@@ -842,8 +816,6 @@ const firstTwoMax = ary(Math.max, 2);
 
 ---
 title: assertValidKeys
-tags: object,intermediate
-firstSeen: 2021-07-18T05:00:00-04:00
 ---
 
 Validates all keys in an object match the given `keys`.
@@ -863,9 +835,6 @@ assertValidKeys({ id: 10, name: 'apple' }, ['id', 'type']); // false
 
 ---
 title: atob
-tags: node,string,beginner
-firstSeen: 2018-01-17T21:43:21+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Decodes a string of data which has been encoded using base-64 encoding.
@@ -882,9 +851,6 @@ atob('Zm9vYmFy'); // 'foobar'
 
 ---
 title: attempt
-tags: function,intermediate
-firstSeen: 2018-01-28T14:44:40+02:00
-lastUpdated: 2020-10-18T20:24:28+03:00
 ---
 
 Attempts to invoke a function with the provided arguments, returning either the result or the caught error object.
@@ -903,7 +869,7 @@ const attempt = (fn, ...args) => {
 ```
 
 ```js
-var elements = attempt(function(selector) {
+let elements = attempt(function(selector) {
   return document.querySelectorAll(selector);
 }, '>_>');
 if (elements instanceof Error) elements = []; // elements = []
@@ -911,9 +877,6 @@ if (elements instanceof Error) elements = []; // elements = []
 
 ---
 title: average
-tags: math,array,beginner
-firstSeen: 2017-12-29T13:29:49+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Calculates the average of two or more numbers.
@@ -933,9 +896,6 @@ average(1, 2, 3); // 2
 
 ---
 title: averageBy
-tags: math,array,intermediate
-firstSeen: 2018-01-11T12:25:54+02:00
-lastUpdated: 2020-10-21T21:17:45+03:00
 ---
 
 Calculates the average of an array, after mapping each element to a value using the provided function.
@@ -958,9 +918,6 @@ averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], 'n'); // 5
 
 ---
 title: bifurcate
-tags: array,intermediate
-firstSeen: 2018-02-14T12:13:07+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Splits values into two groups, based on the result of the given `filter` array. 
@@ -983,9 +940,6 @@ bifurcate(['beep', 'boop', 'foo', 'bar'], [true, true, false, true]);
 
 ---
 title: bifurcateBy
-tags: array,intermediate
-firstSeen: 2018-02-14T12:13:07+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Splits values into two groups, based on the result of the given filtering function. 
@@ -1008,9 +962,6 @@ bifurcateBy(['beep', 'boop', 'foo', 'bar'], x => x[0] === 'b');
 
 ---
 title: binary
-tags: function,intermediate
-firstSeen: 2020-05-13T13:36:36+03:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Creates a function that accepts up to two arguments, ignoring any additional arguments.
@@ -1027,9 +978,6 @@ const binary = fn => (a, b) => fn(a, b);
 
 ---
 title: binarySearch
-tags: algorithm,array,beginner
-firstSeen: 2020-12-28T12:35:44+02:00
-lastUpdated: 2020-12-29T13:06:47+02:00
 ---
 
 Finds the index of a given element in a sorted array using the binary search algorithm.
@@ -1062,9 +1010,6 @@ binarySearch([1, 2, 3, 4, 5], 6); // -1
 
 ---
 title: bind
-tags: function,object,advanced
-firstSeen: 2018-01-24T14:14:49+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Creates a function that invokes `fn` with a given context, optionally prepending any additional supplied parameters to the arguments.
@@ -1088,9 +1033,6 @@ console.log(freddyBound('hi', '!')); // 'hi fred!'
 
 ---
 title: bindAll
-tags: object,function,intermediate
-firstSeen: 2018-01-26T14:14:53+02:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Binds methods of an object to the object itself, overwriting the existing method.
@@ -1111,7 +1053,7 @@ const bindAll = (obj, ...fns) =>
 ```
 
 ```js
-var view = {
+let view = {
   label: 'docs',
   click: function() {
     console.log('clicked ' + this.label);
@@ -1124,9 +1066,6 @@ document.body.addEventListener('click', view.click);
 
 ---
 title: bindKey
-tags: function,object,advanced
-firstSeen: 2018-01-24T14:22:43+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Creates a function that invokes the method at a given key of an object, optionally prepending any additional supplied parameters to the arguments.
@@ -1152,9 +1091,6 @@ console.log(freddyBound('hi', '!')); // 'hi fred!'
 
 ---
 title: binomialCoefficient
-tags: math,algorithm,beginner
-firstSeen: 2018-02-14T12:34:02+02:00
-lastUpdated: 2020-12-28T13:49:24+02:00
 ---
 
 Calculates the number of ways to choose `k` items from `n` items without repetition and without order.
@@ -1184,10 +1120,7 @@ binomialCoefficient(8, 2); // 28
 
 ---
 title: both
-tags: function,logic,beginner
 unlisted: true
-firstSeen: 2020-05-13T11:35:36+03:00
-lastUpdated: 2021-01-04T13:04:15+02:00
 ---
 
 Checks if both of the given functions return `true` for a given set of arguments.
@@ -1207,32 +1140,1199 @@ isPositiveEven(-2); // false
 ```
 
 ---
-title: bottomVisible
-tags: browser,beginner
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
+title: HSBToRGB
 ---
 
-Checks if the bottom of the page is visible.
+Converts a HSB color tuple to RGB format.
 
-- Use `scrollY`, `scrollHeight` and `clientHeight` to determine if the bottom of the page is visible.
+- Use the [HSB to RGB conversion formula](https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB) to convert to the appropriate format.
+- The range of the input parameters is H: [0, 360], S: [0, 100], B: [0, 100].
+- The range of all output values is [0, 255].
 
 ```js
-const bottomVisible = () =>
-  document.documentElement.clientHeight + window.scrollY >=
-  (document.documentElement.scrollHeight ||
-    document.documentElement.clientHeight);
+const HSBToRGB = (h, s, b) => {
+  s /= 100;
+  b /= 100;
+  const k = (n) => (n + h / 60) % 6;
+  const f = (n) => b * (1 - s * Math.max(0, Math.min(k(n), 4 - k(n), 1)));
+  return [255 * f(5), 255 * f(3), 255 * f(1)];
+};
 ```
 
 ```js
-bottomVisible(); // true
+HSBToRGB(18, 81, 99); // [252.45, 109.31084999999996, 47.965499999999984]
 ```
+
+---
+title: HSLToRGB
+---
+
+Converts a HSL color tuple to RGB format.
+
+- Use the [HSL to RGB conversion formula](https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB) to convert to the appropriate format.
+- The range of the input parameters is H: [0, 360], S: [0, 100], L: [0, 100].
+- The range of all output values is [0, 255].
+
+```js
+const HSLToRGB = (h, s, l) => {
+  s /= 100;
+  l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n =>
+    l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [255 * f(0), 255 * f(8), 255 * f(4)];
+};
+```
+
+```js
+HSLToRGB(13, 100, 11); // [56.1, 12.155, 0]
+```
+
+---
+title: JSONToFile
+---
+
+Writes a JSON object to a file.
+
+- Use `fs.writeFileSync()`, template literals and `JSON.stringify()` to write a `json` object to a `.json` file.
+
+```js
+const fs = require('fs');
+
+const JSONToFile = (obj, filename) =>
+  fs.writeFileSync(`${filename}.json`, JSON.stringify(obj, null, 2));
+```
+
+```js
+JSONToFile({ test: 'is passed' }, 'testJsonFile');
+// writes the object to 'testJsonFile.json'
+```
+
+---
+title: JSONtoCSV
+---
+
+Converts an array of objects to a comma-separated values (CSV) string that contains only the `columns` specified.
+
+- Use `Array.prototype.join(delimiter)` to combine all the names in `columns` to create the first row.
+- Use `Array.prototype.map()` and `Array.prototype.reduce()` to create a row for each object. Substitute non-existent values with empty strings and only mapping values in `columns`.
+- Use `Array.prototype.join('\n')` to combine all rows into a string.
+- Omit the third argument, `delimiter`, to use a default delimiter of `','`.
+
+```js
+const JSONtoCSV = (arr, columns, delimiter = ',') =>
+  [
+    columns.join(delimiter),
+    ...arr.map(obj =>
+      columns.reduce(
+        (acc, key) =>
+          `${acc}${!acc.length ? '' : delimiter}"${!obj[key] ? '' : obj[key]}"`,
+        ''
+      )
+    ),
+  ].join('\n');
+```
+
+```js
+JSONtoCSV(
+  [{ a: 1, b: 2 }, { a: 3, b: 4, c: 5 }, { a: 6 }, { b: 7 }],
+  ['a', 'b']
+); // 'a,b\n"1","2"\n"3","4"\n"6",""\n"","7"'
+JSONtoCSV(
+  [{ a: 1, b: 2 }, { a: 3, b: 4, c: 5 }, { a: 6 }, { b: 7 }],
+  ['a', 'b'],
+  ';'
+); // 'a;b\n"1";"2"\n"3";"4"\n"6";""\n"";"7"'
+```
+
+---
+title: RGBToHSB
+---
+
+Converts a RGB color tuple to HSB format.
+
+- Use the [RGB to HSB conversion formula](https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB) to convert to the appropriate format.
+- The range of all input parameters is [0, 255].
+- The range of the resulting values is H: [0, 360], S: [0, 100], B: [0, 100].
+
+```js
+const RGBToHSB = (r, g, b) => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const v = Math.max(r, g, b),
+    n = v - Math.min(r, g, b);
+  const h =
+    n === 0 ? 0 : n && v === r ? (g - b) / n : v === g ? 2 + (b - r) / n : 4 + (r - g) / n;
+  return [60 * (h < 0 ? h + 6 : h), v && (n / v) * 100, v * 100];
+};
+```
+
+```js
+RGBToHSB(252, 111, 48);
+// [18.529411764705856, 80.95238095238095, 98.82352941176471]
+```
+
+---
+title: RGBToHSL
+---
+
+Converts a RGB color tuple to HSL format.
+
+- Use the [RGB to HSL conversion formula](https://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/) to convert to the appropriate format.
+- The range of all input parameters is [0, 255].
+- The range of the resulting values is H: [0, 360], S: [0, 100], L: [0, 100].
+
+```js
+const RGBToHSL = (r, g, b) => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const l = Math.max(r, g, b);
+  const s = l - Math.min(r, g, b);
+  const h = s
+    ? l === r
+      ? (g - b) / s
+      : l === g
+      ? 2 + (b - r) / s
+      : 4 + (r - g) / s
+    : 0;
+  return [
+    60 * h < 0 ? 60 * h + 360 : 60 * h,
+    100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
+    (100 * (2 * l - s)) / 2,
+  ];
+};
+```
+
+```js
+RGBToHSL(45, 23, 11); // [21.17647, 60.71428, 10.98039]
+```
+
+---
+title: RGBToHex
+---
+
+Converts the values of RGB components to a hexadecimal color code.
+
+- Convert given RGB parameters to hexadecimal string using bitwise left-shift operator (`<<`) and `Number.prototype.toString(16)`.
+- Use `String.prototype.padStart(6, '0')` to get a 6-digit hexadecimal value.
+
+```js
+const RGBToHex = (r, g, b) =>
+  ((r << 16) + (g << 8) + b).toString(16).padStart(6, '0');
+```
+
+```js
+RGBToHex(255, 165, 1); // 'ffa501'
+```
+
+---
+title: URLJoin
+---
+
+Joins all given URL segments together, then normalizes the resulting URL.
+
+- Use `String.prototype.join('/')` to combine URL segments.
+- Use a series of `String.prototype.replace()` calls with various regexps to normalize the resulting URL (remove double slashes, add proper slashes for protocol, remove slashes before parameters, combine parameters with `'&'` and normalize first parameter delimiter).
+
+```js
+const URLJoin = (...args) =>
+  args
+    .join('/')
+    .replace(/[\/]+/g, '/')
+    .replace(/^(.+):\//, '$1://')
+    .replace(/^file:/, 'file:/')
+    .replace(/\/(\?|&|#[^!])/g, '$1')
+    .replace(/\?/g, '&')
+    .replace('&', '?');
+```
+
+```js
+URLJoin('http://www.google.com', 'a', '/b/cd', '?foo=123', '?bar=foo');
+// 'http://www.google.com/a/b/cd?foo=123&bar=foo'
+```
+
+---
+title: UUIDGeneratorBrowser
+---
+
+Generates a UUID in a browser.
+
+- Use `Crypto.getRandomValues()` to generate a UUID, compliant with [RFC4122](https://www.ietf.org/rfc/rfc4122.txt) version 4.
+- Use `Number.prototype.toString(16)` to convert it to a proper UUID.
+
+```js
+const UUIDGeneratorBrowser = () =>
+  ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+```
+
+```js
+UUIDGeneratorBrowser(); // '7982fcfe-5721-4632-bede-6000885be57d'
+```
+
+---
+title: UUIDGeneratorNode
+---
+
+Generates a UUID in Node.JS.
+
+- Use `crypto.randomBytes()` to generate a UUID, compliant with [RFC4122](https://www.ietf.org/rfc/rfc4122.txt) version 4.
+- Use `Number.prototype.toString(16)` to convert it to a proper UUID.
+
+```js
+const crypto = require('crypto');
+
+const UUIDGeneratorNode = () =>
+  ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+    (c ^ (crypto.randomBytes(1)[0] & (15 >> (c / 4)))).toString(16)
+  );
+```
+
+```js
+UUIDGeneratorNode(); // '79c7c136-60ee-40a2-beb2-856f1feabefc'
+```
+
+---
+title: accumulate
+---
+
+Creates an array of partial sums.
+
+- Use `Array.prototype.reduce()`, initialized with an empty array accumulator to iterate over `nums`.
+- Use `Array.prototype.slice(-1)`, the spread operator (`...`) and the unary `+` operator to add each value to the accumulator array containing the previous sums.
+
+```js
+const accumulate = (...nums) =>
+  nums.reduce((acc, n) => [...acc, n + +acc.slice(-1)], []);
+```
+
+```js
+accumulate(1, 2, 3, 4); // [1, 3, 6, 10]
+accumulate(...[1, 2, 3, 4]); // [1, 3, 6, 10]
+```
+
+---
+title: addClass
+---
+
+Adds a class to an HTML element.
+
+- Use `Element.classList` and `DOMTokenList.add()` to add the specified class to the element.
+
+```js
+const addClass = (el, className) => el.classList.add(className);
+```
+
+```js
+addClass(document.querySelector('p'), 'special');
+// The paragraph will now have the 'special' class
+```
+
+---
+title: addDaysToDate
+---
+
+Calculates the date of `n` days from the given date, returning its string representation.
+
+- Use `new Date()` to create a date object from the first argument.
+- Use `Date.prototype.getDate()` and `Date.prototype.setDate()` to add `n` days to the given date.
+- Use `Date.prototype.toISOString()` to return a string in `yyyy-mm-dd` format.
+
+```js
+const addDaysToDate = (date, n) => {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+};
+```
+
+```js
+addDaysToDate('2020-10-15', 10); // '2020-10-25'
+addDaysToDate('2020-10-15', -10); // '2020-10-05'
+```
+
+---
+title: addEventListenerAll
+---
+
+Attaches an event listener to all the provided targets.
+
+- Use `Array.prototype.forEach()` and `EventTarget.addEventListener()` to attach the provided `listener` for the given event `type` to all `targets`.
+
+```js
+const addEventListenerAll = (targets, type, listener, options, useCapture) => {
+  targets.forEach(target =>
+    target.addEventListener(type, listener, options, useCapture)
+  );
+};
+```
+
+```js
+addEventListenerAll(document.querySelectorAll('a'), 'click', () =>
+  console.log('Clicked a link')
+);
+// Logs 'Clicked a link' whenever any anchor element is clicked
+```
+
+---
+title: addMinutesToDate
+---
+
+Calculates the date of `n` minutes from the given date, returning its string representation.
+
+- Use `new Date()` to create a date object from the first argument.
+- Use `Date.prototype.getTime()` and `Date.prototype.setTime()` to add `n` minutes to the given date.
+- Use `Date.prototype.toISOString()`, `String.prototype.split()` and `String.prototype.replace()` to return a string in `yyyy-mm-dd HH:MM:SS` format.
+
+
+```js
+const addMinutesToDate = (date, n) => {
+  const d = new Date(date);
+  d.setTime(d.getTime() + n * 60000);
+  return d.toISOString().split('.')[0].replace('T',' ');
+};
+```
+
+```js
+addMinutesToDate('2020-10-19 12:00:00', 10); // '2020-10-19 12:10:00'
+addMinutesToDate('2020-10-19', -10); // '2020-10-18 23:50:00'
+```
+
+---
+title: addMultipleListeners
+---
+
+Adds multiple event listeners with the same handler to an element.
+
+- Use `Array.prototype.forEach()` and `EventTarget.addEventListener()` to add multiple event listeners with an assigned callback function to an element.
+
+```js
+const addMultipleListeners = (el, types, listener, options, useCapture) => {
+  types.forEach(type =>
+    el.addEventListener(type, listener, options, useCapture)
+  );
+};
+```
+
+```js
+addMultipleListeners(
+  document.querySelector('.my-element'),
+  ['click', 'mousedown'],
+  () => { console.log('hello!') }
+);
+```
+
+---
+title: addStyles
+---
+
+Adds the provided styles to the given element.
+
+- Use `Object.assign()` and `ElementCSSInlineStyle.style` to merge the provided `styles` object into the style of the given element.
+
+```js
+const addStyles = (el, styles) => Object.assign(el.style, styles);
+```
+
+```js
+addStyles(document.getElementById('my-element'), {
+  background: 'red',
+  color: '#ffff00',
+  fontSize: '3rem'
+});
+```
+
+---
+title: addWeekDays
+---
+
+Calculates the date after adding the given number of business days.
+
+- Use `Array.from()` to construct an array with `length` equal to the `count` of business days to be added.
+- Use `Array.prototype.reduce()` to iterate over the array, starting from `startDate` and incrementing, using `Date.prototype.getDate()` and `Date.prototype.setDate()`.
+- If the current `date` is on a weekend, update it again by adding either one day or two days to make it a weekday.
+- **NOTE:** Does not take official holidays into account.
+
+```js
+const addWeekDays = (startDate, count) =>
+  Array.from({ length: count }).reduce(date => {
+    date = new Date(date.setDate(date.getDate() + 1));
+    if (date.getDay() % 6 === 0)
+      date = new Date(date.setDate(date.getDate() + (date.getDay() / 6 + 1)));
+    return date;
+  }, startDate);
+```
+
+```js
+addWeekDays(new Date('Oct 09, 2020'), 5); // 'Oct 16, 2020'
+addWeekDays(new Date('Oct 12, 2020'), 5); // 'Oct 19, 2020'
+```
+
+---
+title: all
+---
+
+Checks if the provided predicate function returns `true` for all elements in a collection.
+
+- Use `Array.prototype.every()` to test if all elements in the collection return `true` based on `fn`.
+- Omit the second argument, `fn`, to use `Boolean` as a default.
+
+```js
+const all = (arr, fn = Boolean) => arr.every(fn);
+```
+
+```js
+all([4, 2, 3], x => x > 1); // true
+all([1, 2, 3]); // true
+```
+
+---
+title: allEqual
+---
+
+Checks if all elements in an array are equal.
+
+- Use `Array.prototype.every()` to check if all the elements of the array are the same as the first one.
+- Elements in the array are compared using the strict comparison operator, which does not account for `NaN` self-inequality.
+
+```js
+const allEqual = arr => arr.every(val => val === arr[0]);
+```
+
+```js
+allEqual([1, 2, 3, 4, 5, 6]); // false
+allEqual([1, 1, 1, 1]); // true
+```
+
+---
+title: allEqualBy
+---
+
+Checks if all elements in an array are equal, based on the provided mapping function.
+
+- Apply `fn` to the first element of `arr`.
+- Use `Array.prototype.every()` to check if `fn` returns the same value for all elements in the array as it did for the first one.
+- Elements in the array are compared using the strict comparison operator, which does not account for `NaN` self-inequality.
+
+```js
+const allEqualBy = (arr, fn) => {
+  const eql = fn(arr[0]);
+  return arr.every(val => fn(val) === eql);
+};
+```
+
+```js
+allEqualBy([1.1, 1.2, 1.3], Math.round); // true
+allEqualBy([1.1, 1.3, 1.6], Math.round); // false
+```
+
+---
+title: allUnique
+---
+
+Checks if all elements in an array are unique.
+
+- Create a new `Set` from the mapped values to keep only unique occurrences.
+- Use `Array.prototype.length` and `Set.prototype.size` to compare the length of the unique values to the original array.
+
+```js
+const allUnique = arr => arr.length === new Set(arr).size;
+```
+
+```js
+allUnique([1, 2, 3, 4]); // true
+allUnique([1, 1, 2, 3]); // false
+```
+
+---
+title: allUniqueBy
+---
+
+Checks if all elements in an array are unique, based on the provided mapping function.
+
+- Use `Array.prototype.map()` to apply `fn` to all elements in `arr`.
+- Create a new `Set` from the mapped values to keep only unique occurrences.
+- Use `Array.prototype.length` and `Set.prototype.size` to compare the length of the unique mapped values to the original array.
+
+```js
+const allUniqueBy = (arr, fn) => arr.length === new Set(arr.map(fn)).size;
+```
+
+```js
+allUniqueBy([1.2, 2.4, 2.9], Math.round); // true
+allUniqueBy([1.2, 2.3, 2.4], Math.round); // false
+```
+
+---
+title: and
+unlisted: true
+---
+
+Checks if both arguments are `true`.
+
+- Use the logical and (`&&`) operator on the two given values.
+
+```js
+const and = (a, b) => a && b;
+```
+
+```js
+and(true, true); // true
+and(true, false); // false
+and(false, false); // false
+```
+
+---
+title: any
+---
+
+Checks if the provided predicate function returns `true` for at least one element in a collection.
+
+- Use `Array.prototype.some()` to test if any elements in the collection return `true` based on `fn`.
+- Omit the second argument, `fn`, to use `Boolean` as a default.
+
+```js
+const any = (arr, fn = Boolean) => arr.some(fn);
+```
+
+```js
+any([0, 1, 2, 0], x => x >= 2); // true
+any([0, 0, 1, 0]); // true
+```
+
+---
+title: aperture
+---
+
+Creates an array of `n`-tuples of consecutive elements.
+
+- Use `Array.prototype.slice()` and `Array.prototype.map()` to create an array of appropriate length.
+- Populate the array with `n`-tuples of consecutive elements from `arr`.
+- If `n` is greater than the length of `arr`, return an empty array.
+
+```js
+const aperture = (n, arr) =>
+  n > arr.length
+    ? []
+    : arr.slice(n - 1).map((v, i) => arr.slice(i, i + n));
+```
+
+```js
+aperture(2, [1, 2, 3, 4]); // [[1, 2], [2, 3], [3, 4]]
+aperture(3, [1, 2, 3, 4]); // [[1, 2, 3], [2, 3, 4]]
+aperture(5, [1, 2, 3, 4]); // []
+```
+
+---
+title: approximatelyEqual
+---
+
+Checks if two numbers are approximately equal to each other.
+
+- Use `Math.abs()` to compare the absolute difference of the two values to `epsilon`.
+- Omit the third argument, `epsilon`, to use a default value of `0.001`.
+
+```js
+const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
+  Math.abs(v1 - v2) < epsilon;
+```
+
+```js
+approximatelyEqual(Math.PI / 2.0, 1.5708); // true
+```
+
+---
+title: arithmeticProgression
+---
+
+Creates an array of numbers in the arithmetic progression, starting with the given positive integer and up to the specified limit.
+
+- Use `Array.from()` to create an array of the desired length, `lim/n`. Use a map function to fill it with the desired values in the given range.
+
+```js
+const arithmeticProgression  = (n, lim) =>
+  Array.from({ length: Math.ceil(lim / n) }, (_, i) => (i + 1) * n );
+```
+
+```js
+arithmeticProgression(5, 25); // [5, 10, 15, 20, 25]
+```
+
+---
+title: arrayToCSV
+---
+
+Converts a 2D array to a comma-separated values (CSV) string.
+
+- Use `Array.prototype.map()` and `Array.prototype.join(delimiter)` to combine individual 1D arrays (rows) into strings.
+- Use `Array.prototype.join('\n')` to combine all rows into a CSV string, separating each row with a newline.
+- Omit the second argument, `delimiter`, to use a default delimiter of `,`.
+
+```js
+const arrayToCSV = (arr, delimiter = ',') =>
+  arr
+    .map(v =>
+      v.map(x => (isNaN(x) ? `"${x.replace(/"/g, '""')}"` : x)).join(delimiter)
+    )
+    .join('\n');
+```
+
+```js
+arrayToCSV([['a', 'b'], ['c', 'd']]); // '"a","b"\n"c","d"'
+arrayToCSV([['a', 'b'], ['c', 'd']], ';'); // '"a";"b"\n"c";"d"'
+arrayToCSV([['a', '"b" great'], ['c', 3.1415]]);
+// '"a","""b"" great"\n"c",3.1415'
+```
+
+---
+title: arrayToHTMLList
+---
+
+Converts the given array elements into `<li>` tags and appends them to the list of the given id.
+
+- Use `Array.prototype.map()` and `Document.querySelector()` to create a list of html tags.
+
+```js
+const arrayToHTMLList = (arr, listID) => 
+  document.querySelector(`#${listID}`).innerHTML += arr
+    .map(item => `<li>${item}</li>`)
+    .join('');
+```
+
+```js
+arrayToHTMLList(['item 1', 'item 2'], 'myListID');
+```
+
+---
+title: ary
+---
+
+Creates a function that accepts up to `n` arguments, ignoring any additional arguments.
+
+- Call the provided function, `fn`, with up to `n` arguments, using `Array.prototype.slice(0, n)` and the spread operator (`...`).
+
+```js
+const ary = (fn, n) => (...args) => fn(...args.slice(0, n));
+```
+
+```js
+const firstTwoMax = ary(Math.max, 2);
+[[2, 6, 'a'], [6, 4, 8], [10]].map(x => firstTwoMax(...x)); // [6, 6, 10]
+```
+
+---
+title: assertValidKeys
+---
+
+Validates all keys in an object match the given `keys`.
+
+- Use `Object.keys()` to get the keys of the given object, `obj`.
+- Use `Array.prototype.every()` and `Array.prototype.includes()` to validate that each key in the object is specified in the `keys` array.
+
+```js
+const assertValidKeys = (obj, keys) =>
+  Object.keys(obj).every(key => keys.includes(key));
+```
+
+```js
+assertValidKeys({ id: 10, name: 'apple' }, ['id', 'name']); // true
+assertValidKeys({ id: 10, name: 'apple' }, ['id', 'type']); // false
+```
+
+---
+title: atob
+---
+
+Decodes a string of data which has been encoded using base-64 encoding.
+
+- Create a `Buffer` for the given string with base-64 encoding and use `Buffer.toString('binary')` to return the decoded string.
+
+```js
+const atob = str => Buffer.from(str, 'base64').toString('binary');
+```
+
+```js
+atob('Zm9vYmFy'); // 'foobar'
+```
+
+---
+title: attempt
+---
+
+Attempts to invoke a function with the provided arguments, returning either the result or the caught error object.
+
+- Use a `try... catch` block to return either the result of the function or an appropriate error.
+- If the caught object is not an `Error`, use it to create a new `Error`. 
+
+```js
+const attempt = (fn, ...args) => {
+  try {
+    return fn(...args);
+  } catch (e) {
+    return e instanceof Error ? e : new Error(e);
+  }
+};
+```
+
+```js
+let elements = attempt(function(selector) {
+  return document.querySelectorAll(selector);
+}, '>_>');
+if (elements instanceof Error) elements = []; // elements = []
+```
+
+---
+title: average
+---
+
+Calculates the average of two or more numbers.
+
+- Use `Array.prototype.reduce()` to add each value to an accumulator, initialized with a value of `0`.
+- Divide the resulting array by its length.
+
+```js
+const average = (...nums) =>
+  nums.reduce((acc, val) => acc + val, 0) / nums.length;
+```
+
+```js
+average(...[1, 2, 3]); // 2
+average(1, 2, 3); // 2
+```
+
+---
+title: averageBy
+---
+
+Calculates the average of an array, after mapping each element to a value using the provided function.
+
+- Use `Array.prototype.map()` to map each element to the value returned by `fn`.
+- Use `Array.prototype.reduce()` to add each value to an accumulator, initialized with a value of `0`.
+- Divide the resulting array by its length.
+
+```js
+const averageBy = (arr, fn) =>
+  arr
+    .map(typeof fn === 'function' ? fn : val => val[fn])
+    .reduce((acc, val) => acc + val, 0) / arr.length;
+```
+
+```js
+averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], o => o.n); // 5
+averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], 'n'); // 5
+```
+
+---
+title: bifurcate
+---
+
+Splits values into two groups, based on the result of the given `filter` array. 
+
+- Use `Array.prototype.reduce()` and `Array.prototype.push()` to add elements to groups, based on `filter`.
+- If `filter` has a truthy value for any element, add it to the first group, otherwise add it to the second group.
+
+```js
+const bifurcate = (arr, filter) =>
+  arr.reduce((acc, val, i) => (acc[filter[i] ? 0 : 1].push(val), acc), [
+    [],
+    [],
+  ]);
+```
+
+```js
+bifurcate(['beep', 'boop', 'foo', 'bar'], [true, true, false, true]);
+// [ ['beep', 'boop', 'bar'], ['foo'] ]
+```
+
+---
+title: bifurcateBy
+---
+
+Splits values into two groups, based on the result of the given filtering function. 
+
+- Use `Array.prototype.reduce()` and `Array.prototype.push()` to add elements to groups, based on the value returned by `fn` for each element.
+- If `fn` returns a truthy value for any element, add it to the first group, otherwise add it to the second group.
+
+```js
+const bifurcateBy = (arr, fn) =>
+  arr.reduce((acc, val, i) => (acc[fn(val, i) ? 0 : 1].push(val), acc), [
+    [],
+    [],
+  ]);
+```
+
+```js
+bifurcateBy(['beep', 'boop', 'foo', 'bar'], x => x[0] === 'b');
+// [ ['beep', 'boop', 'bar'], ['foo'] ]
+```
+
+---
+title: binary
+---
+
+Creates a function that accepts up to two arguments, ignoring any additional arguments.
+
+- Call the provided function, `fn`, with the first two arguments given.
+
+```js
+const binary = fn => (a, b) => fn(a, b);
+```
+
+```js
+['2', '1', '0'].map(binary(Math.max)); // [2, 1, 2]
+```
+
+---
+title: binarySearch
+---
+
+Finds the index of a given element in a sorted array using the binary search algorithm.
+
+- Declare the left and right search boundaries, `l` and `r`, initialized to `0` and the `length` of the array respectively.
+- Use a `while` loop to repeatedly narrow down the search subarray, using `Math.floor()` to cut it in half.
+- Return the index of the element if found, otherwise return `-1`.
+- **Note:** Does not account for duplicate values in the array.
+
+```js
+const binarySearch = (arr, item) => {
+  let l = 0,
+    r = arr.length - 1;
+  while (l <= r) {
+    const mid = Math.floor((l + r) / 2);
+    const guess = arr[mid];
+    if (guess === item) return mid;
+    if (guess > item) r = mid - 1;
+    else l = mid + 1;
+  }
+  return -1;
+};
+```
+
+```js
+binarySearch([1, 2, 3, 4, 5], 1); // 0
+binarySearch([1, 2, 3, 4, 5], 5); // 4
+binarySearch([1, 2, 3, 4, 5], 6); // -1
+```
+
+---
+title: bind
+---
+
+Creates a function that invokes `fn` with a given context, optionally prepending any additional supplied parameters to the arguments.
+
+- Return a `function` that uses `Function.prototype.apply()` to apply the given `context` to `fn`.
+- Use the spread operator (`...`) to prepend any additional supplied parameters to the arguments.
+
+```js
+const bind = (fn, context, ...boundArgs) => (...args) =>
+  fn.apply(context, [...boundArgs, ...args]);
+```
+
+```js
+function greet(greeting, punctuation) {
+  return greeting + ' ' + this.user + punctuation;
+}
+const freddy = { user: 'fred' };
+const freddyBound = bind(greet, freddy);
+console.log(freddyBound('hi', '!')); // 'hi fred!'
+```
+
+---
+title: bindAll
+---
+
+Binds methods of an object to the object itself, overwriting the existing method.
+
+- Use `Array.prototype.forEach()` to iterate over the given `fns`.
+- Return a function for each one, using `Function.prototype.apply()` to apply the given context (`obj`) to `fn`.
+
+```js
+const bindAll = (obj, ...fns) =>
+  fns.forEach(
+    fn => (
+      (f = obj[fn]),
+      (obj[fn] = function() {
+        return f.apply(obj);
+      })
+    )
+  );
+```
+
+```js
+let view = {
+  label: 'docs',
+  click: function() {
+    console.log('clicked ' + this.label);
+  }
+};
+bindAll(view, 'click');
+document.body.addEventListener('click', view.click);
+// Log 'clicked docs' when clicked.
+```
+
+---
+title: bindKey
+---
+
+Creates a function that invokes the method at a given key of an object, optionally prepending any additional supplied parameters to the arguments.
+
+- Return a `function` that uses `Function.prototype.apply()` to bind `context[fn]` to `context`.
+- Use the spread operator (`...`) to prepend any additional supplied parameters to the arguments.
+
+```js
+const bindKey = (context, fn, ...boundArgs) => (...args) =>
+  context[fn].apply(context, [...boundArgs, ...args]);
+```
+
+```js
+const freddy = {
+  user: 'fred',
+  greet: function(greeting, punctuation) {
+    return greeting + ' ' + this.user + punctuation;
+  }
+};
+const freddyBound = bindKey(freddy, 'greet');
+console.log(freddyBound('hi', '!')); // 'hi fred!'
+```
+
+---
+title: binomialCoefficient
+---
+
+Calculates the number of ways to choose `k` items from `n` items without repetition and without order.
+
+- Use `Number.isNaN()` to check if any of the two values is `NaN`.
+- Check if `k` is less than `0`, greater than or equal to `n`, equal to `1` or `n - 1` and return the appropriate result.
+- Check if `n - k` is less than `k` and switch their values accordingly.
+- Loop from `2` through `k` and calculate the binomial coefficient.
+- Use `Math.round()` to account for rounding errors in the calculation.
+
+```js
+const binomialCoefficient = (n, k) => {
+  if (Number.isNaN(n) || Number.isNaN(k)) return NaN;
+  if (k < 0 || k > n) return 0;
+  if (k === 0 || k === n) return 1;
+  if (k === 1 || k === n - 1) return n;
+  if (n - k < k) k = n - k;
+  let res = n;
+  for (let j = 2; j <= k; j++) res *= (n - j + 1) / j;
+  return Math.round(res);
+};
+```
+
+```js
+binomialCoefficient(8, 2); // 28
+```
+
+---
+title: both
+unlisted: true
+---
+
+Checks if both of the given functions return `true` for a given set of arguments.
+
+- Use the logical and (`&&`) operator on the result of calling the two functions with the supplied `args`.
+
+```js
+const both = (f, g) => (...args) => f(...args) && g(...args);
+```
+
+```js
+const isEven = num => num % 2 === 0;
+const isPositive = num => num > 0;
+const isPositiveEven = both(isEven, isPositive);
+isPositiveEven(4); // true
+isPositiveEven(-2); // false
+```
+
+[Widgets](https://www.wappalyzer.com/technologies/widgets/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Moat.svg
+chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Facebook.svg
+![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Facebook.svg)
+
+Facebook](https://www.wappalyzer.com/technologies/widgets/facebook/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/AddThis.svg)
+
+AddThis](https://www.wappalyzer.com/technologies/widgets/addthis/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Analytics](https://www.wappalyzer.com/technologies/analytics/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Moat.svg)
+
+Moat](https://www.wappalyzer.com/technologies/analytics/moat/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google%20Analytics.svg)
+
+Google Analytics](https://www.wappalyzer.com/technologies/analytics/google-analytics/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google.svg)
+
+Google Ads Conversion Tracking](https://www.wappalyzer.com/technologies/analytics/google-ads-conversion-tracking/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[JavaScript frameworks](https://www.wappalyzer.com/technologies/javascript-frameworks/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/React.png)
+
+React](https://www.wappalyzer.com/technologies/javascript-frameworks/react/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Gatsby.svg)
+
+Gatsby2.25.4](https://www.wappalyzer.com/technologies/javascript-frameworks/gatsby/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Font scripts](https://www.wappalyzer.com/technologies/font-scripts/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google%20Font%20API.png)
+
+Google Font API](https://www.wappalyzer.com/technologies/font-scripts/google-font-api/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Miscellaneous](https://www.wappalyzer.com/technologies/miscellaneous/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/webpack.svg)
+
+webpack](https://www.wappalyzer.com/technologies/miscellaneous/webpack/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Prism.svg)
+
+Prism](https://www.wappalyzer.com/technologies/miscellaneous/prism/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[CDN](https://www.wappalyzer.com/technologies/cdn/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Unpkg.png)
+
+Unpkg](https://www.wappalyzer.com/technologies/cdn/unpkg/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/jsdelivr-icon.svg)
+
+jsDelivr](https://www.wappalyzer.com/technologies/cdn/jsdelivr/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/jQuery.svg)
+
+jQuery CDN](https://www.wappalyzer.com/technologies/cdn/jquery-cdn/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Netlify.svg)
+
+Netlify](https://www.wappalyzer.com/technologies/cdn/netlify/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Marketing automation](https://www.wappalyzer.com/technologies/marketing-automation/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/mailchimp.svg)
+
+MailChimp](https://www.wappalyzer.com/technologies/marketing-automation/mailchimp/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Advertising](https://www.wappalyzer.com/technologies/advertising/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google%20AdSense.svg)
+
+Google AdSense](https://www.wappalyzer.com/technologies/advertising/google-adsense/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Tag managers](https://www.wappalyzer.com/technologies/tag-managers/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google%20Tag%20Manager.svg)
+
+Google Tag Manager](https://www.wappalyzer.com/technologies/tag-managers/google-tag-manager/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Live chat](https://www.wappalyzer.com/technologies/live-chat/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Smartsupp.svg)
+
+Smartsupp1](https://www.wappalyzer.com/technologies/live-chat/smartsupp/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/LiveChat.png)
+
+LiveChat](https://www.wappalyzer.com/technologies/live-chat/livechat/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Static site generators](https://www.wappalyzer.com/technologies/static-site-generator/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Gatsby.svg)
+
+Gatsby2.25.4](https://www.wappalyzer.com/technologies/static-site-generator/gatsby/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[JavaScript libraries](https://www.wappalyzer.com/technologies/javascript-libraries/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Lo-dash.png)
+
+Lodash4.17.11](https://www.wappalyzer.com/technologies/javascript-libraries/lodash/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Dojo.png)
+
+Dojo1](https://www.wappalyzer.com/technologies/javascript-libraries/dojo/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/core-js.png)
+
+core-js3.10.2](https://www.wappalyzer.com/technologies/javascript-libraries/core-js/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/jQuery.svg)
+
+jQuery3.1.1](https://www.wappalyzer.com/technologies/javascript-libraries/jquery/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[PaaS](https://www.wappalyzer.com/technologies/paas/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Netlify.svg)
+
+Netlify](https://www.wappalyzer.com/technologies/paas/netlify/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[UI frameworks](https://www.wappalyzer.com/technologies/ui-frameworks/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Bootstrap.svg)
+
+Bootstrap5.1.1](https://www.wappalyzer.com/technologies/ui-frameworks/bootstrap/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Authentication](https://www.wappalyzer.com/technologies/authentication/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Facebook.svg)
+
+Facebook Login](https://www.wappalyzer.com/technologies/authentication/facebook-login/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Email](https://www.wappalyzer.com/technologies/email/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/mailchimp.svg)
+
+MailChimp](https://www.wappalyzer.com/technologies/email/mailchimp/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
+
+[Retargeting](https://www.wappalyzer.com/technologies/retargeting/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer) 
+
+
+[![](chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/images/icons/Google%20Tag%20Manager.svg)
+
+Google Remarketing Tag](https://www.wappalyzer.com/technologies/retargeting/google-remarketing-tag/?utm_source=popup&utm_medium=extension&utm_campaign=wappalyzer)
 
 ---
 title: btoa
-tags: node,string,beginner
-firstSeen: 2018-01-17T21:43:21+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Creates a base-64 encoded ASCII string from a String object in which each character in the string is treated as a byte of binary data.
@@ -1249,9 +2349,6 @@ btoa('foobar'); // 'Zm9vYmFy'
 
 ---
 title: bubbleSort
-tags: algorithm,array,beginner
-firstSeen: 2020-12-27T21:20:31+02:00
-lastUpdated: 2020-12-29T12:18:58+02:00
 ---
 
 Sorts an array of numbers, using the bubble sort algorithm.
@@ -1286,9 +2383,6 @@ bubbleSort([2, 1, 4, 3]); // [1, 2, 3, 4]
 
 ---
 title: bucketSort
-tags: algorithm,array,intermediate
-firstSeen: 2020-12-28T22:11:56+02:00
-lastUpdated: 2020-12-29T12:22:44+02:00
 ---
 
 Sorts an array of numbers, using the bucket sort algorithm.
@@ -1319,9 +2413,6 @@ bucketSort([6, 3, 4, 1]); // [1, 3, 4, 6]
 
 ---
 title: byteSize
-tags: string,beginner
-firstSeen: 2017-12-29T14:30:34+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Returns the length of a string in bytes.
@@ -1340,9 +2431,6 @@ byteSize('Hello World'); // 11
 
 ---
 title: caesarCipher
-tags: algorithm,string,beginner
-firstSeen: 2020-12-28T20:10:18+02:00
-lastUpdated: 2020-12-29T12:29:21+02:00
 ---
 
 Encrypts or decrypts a given string using the Caesar cipher.
@@ -1377,9 +2465,6 @@ caesarCipher('Ebiil Tloia!', 23, true); // 'Hello World!'
 
 ---
 title: call
-tags: function,advanced
-firstSeen: 2017-12-22T21:54:30+02:00
-lastUpdated: 2021-06-13T13:50:25+03:00
 ---
 
 Given a key and a set of arguments, call them when given a context.
@@ -1402,9 +2487,6 @@ Promise.resolve([1, 2, 3])
 
 ---
 title: capitalize
-tags: string,intermediate
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Capitalizes the first letter of a string.
@@ -1426,9 +2508,6 @@ capitalize('fooBar', true); // 'Foobar'
 
 ---
 title: capitalizeEveryWord
-tags: string,regexp,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Capitalizes the first letter of every word in a string.
@@ -1446,9 +2525,6 @@ capitalizeEveryWord('hello world!'); // 'Hello World!'
 
 ---
 title: cartesianProduct
-tags: math,array,beginner
-firstSeen: 2020-12-28T20:23:47+02:00
-lastUpdated: 2020-12-29T12:31:43+02:00
 ---
 
 Calculates the cartesian product of two arrays.
@@ -1467,9 +2543,6 @@ cartesianProduct(['x', 'y'], [1, 2]);
 
 ---
 title: castArray
-tags: type,array,beginner
-firstSeen: 2018-01-23T20:54:12+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Casts the provided value as an array if it's not one.
@@ -1487,10 +2560,7 @@ castArray([1]); // [1]
 
 ---
 title: celsiusToFahrenheit
-tags: math,beginner
 unlisted: true
-firstSeen: 2020-04-16T11:00:06+03:00
-lastUpdated: 2021-01-04T13:04:15+02:00
 ---
 
 Converts Celsius to Fahrenheit.
@@ -1507,9 +2577,6 @@ celsiusToFahrenheit(33); // 91.4
 
 ---
 title: chainAsync
-tags: function,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Chains asynchronous functions.
@@ -1546,9 +2613,6 @@ chainAsync([
 
 ---
 title: changeLightness
-tags: string,browser,regexp,intermediate
-firstSeen: 2020-10-30T17:38:31+02:00
-lastUpdated: 2020-10-31T16:37:54+02:00
 ---
 
 Changes the lightness value of an `hsl()` color string.
@@ -1578,9 +2642,6 @@ changeLightness(-10, 'hsl(330, 50%, 50%)'); // 'hsl(330, 50%, 40%)'
 
 ---
 title: checkProp
-tags: function,object,intermediate
-firstSeen: 2019-03-17T03:53:00+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Creates a function that will invoke a predicate function for the specified property on a given object.
@@ -1613,9 +2674,6 @@ noLength(new Set()); // true
 
 ---
 title: chunk
-tags: array,intermediate
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-11-03T21:35:12+02:00
 ---
 
 Chunks an array into smaller arrays of a specified size.
@@ -1637,9 +2695,6 @@ chunk([1, 2, 3, 4, 5], 2); // [[1, 2], [3, 4], [5]]
 
 ---
 title: chunkIntoN
-tags: array,intermediate
-firstSeen: 2020-05-04T13:00:46+03:00
-lastUpdated: 2020-11-03T21:46:13+02:00
 ---
 
 Chunks an array into `n` smaller arrays.
@@ -1664,9 +2719,6 @@ chunkIntoN([1, 2, 3, 4, 5, 6, 7], 4); // [[1, 2], [3, 4], [5, 6], [7]]
 
 ---
 title: chunkify
-tags: function,generator,array,advanced
-firstSeen: 2021-03-16T22:50:40+02:00
-lastUpdated: 2021-03-16T22:50:40+02:00
 ---
 
 Chunks an iterable into smaller arrays of a specified size.
@@ -1696,9 +2748,6 @@ const x = new Set([1, 2, 1, 3, 4, 1, 2, 5]);
 
 ---
 title: clampNumber
-tags: math,beginner
-firstSeen: 2017-12-20T19:19:18+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Clamps `num` within the inclusive range specified by the boundary values `a` and `b`.
@@ -1718,9 +2767,6 @@ clampNumber(1, -1, -5); // -1
 
 ---
 title: cloneRegExp
-tags: type,intermediate
-firstSeen: 2018-01-01T19:45:47+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Clones a regular expression.
@@ -1738,9 +2784,6 @@ const regExp2 = cloneRegExp(regExp); // regExp !== regExp2
 
 ---
 title: coalesce
-tags: type,beginner
-firstSeen: 2017-12-17T10:08:55+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Returns the first defined, non-null argument.
@@ -1757,9 +2800,6 @@ coalesce(null, undefined, '', NaN, 'Waldo'); // ''
 
 ---
 title: coalesceFactory
-tags: function,type,intermediate
-firstSeen: 2017-12-18T12:15:36+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Customizes a coalesce function that returns the first argument which is true based on the given validator.
@@ -1779,9 +2819,6 @@ customCoalesce(undefined, null, NaN, '', 'Waldo'); // 'Waldo'
 
 ---
 title: collectInto
-tags: function,array,intermediate
-firstSeen: 2017-12-22T05:08:36+02:00
-lastUpdated: 2021-06-13T13:50:25+03:00
 ---
 
 Changes a function that accepts an array into a variadic function.
@@ -1802,9 +2839,6 @@ Pall(p1, p2, p3).then(console.log); // [1, 2, 3] (after about 2 seconds)
 
 ---
 title: colorize
-tags: node,string,intermediate
-firstSeen: 2018-01-13T13:36:59+02:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Adds special characters to text to print in color in the console (combined with `console.log()`).
@@ -1842,9 +2876,6 @@ console.log(colorize(colorize('foo').yellow, colorize('foo').green).bgWhite);
 
 ---
 title: combine
-tags: array,object,intermediate
-firstSeen: 2020-10-04T00:26:51+03:00
-lastUpdated: 2020-10-08T02:22:39+03:00
 ---
 
 Combines two arrays of objects, using the specified key to match objects.
@@ -1885,9 +2916,6 @@ combine(x, y, 'id');
 
 ---
 title: compact
-tags: array,beginner
-firstSeen: 2017-12-14T08:19:15+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Removes falsy values from an array.
@@ -1905,9 +2933,6 @@ compact([0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34]);
 
 ---
 title: compactObject
-tags: object,array,recursion,advanced
-firstSeen: 2020-11-27T13:57:41+02:00
-lastUpdated: 2020-11-27T13:57:41+02:00
 ---
 
 Deeply removes all falsy values from an object or array.
@@ -1951,9 +2976,6 @@ compactObject(obj);
 
 ---
 title: compactWhitespace
-tags: string,regexp,beginner
-firstSeen: 2018-12-12T19:11:33+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Compacts whitespaces in a string.
@@ -1971,9 +2993,6 @@ compactWhitespace('Lorem \n Ipsum'); // 'Lorem Ipsum'
 
 ---
 title: complement
-tags: function,logic,beginner
-firstSeen: 2020-05-13T11:28:33+03:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Returns a function that is the logical complement of the given function, `fn`.
@@ -1993,9 +3012,6 @@ isOdd(3); // true
 
 ---
 title: compose
-tags: function,intermediate
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Performs right-to-left function composition.
@@ -2020,9 +3036,6 @@ multiplyAndAdd5(5, 2); // 15
 
 ---
 title: composeRight
-tags: function,intermediate
-firstSeen: 2018-01-23T22:12:56+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Performs left-to-right function composition.
@@ -2044,9 +3057,6 @@ addAndSquare(1, 2); // 9
 
 ---
 title: containsWhitespace
-tags: string,regexp,beginner
-firstSeen: 2020-03-25T12:37:13+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Checks if the given string contains any whitespace characters.
@@ -2064,9 +3074,6 @@ containsWhitespace('lorem ipsum'); // true
 
 ---
 title: converge
-tags: function,intermediate
-firstSeen: 2018-02-07T12:23:04+02:00
-lastUpdated: 2021-01-08T00:23:44+02:00
 ---
 
 Accepts a converging function and a list of branching functions and returns a function that applies each branching function to the arguments and the results of the branching functions are passed as arguments to the converging function.
@@ -2089,9 +3096,6 @@ average([1, 2, 3, 4, 5, 6, 7]); // 4
 
 ---
 title: copySign
-tags: math,beginner
-firstSeen: 2020-10-07T23:52:57+03:00
-lastUpdated: 2020-10-07T23:52:57+03:00
 ---
 
 Returns the absolute value of the first number, but the sign of the second.
@@ -2112,9 +3116,6 @@ copySign(-2, -3); // -2
 
 ---
 title: copyToClipboard
-tags: browser,string,event,advanced
-firstSeen: 2017-12-31T11:40:33+02:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Copies a string to the clipboard.
@@ -2155,9 +3156,6 @@ copyToClipboard('Lorem ipsum'); // 'Lorem ipsum' copied to clipboard.
 
 ---
 title: countBy
-tags: array,object,intermediate
-firstSeen: 2018-01-11T13:45:53+02:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Groups the elements of an array based on the given function and returns the count of elements in each group.
@@ -2182,9 +3180,6 @@ countBy([{ count: 5 }, { count: 10 }, { count: 5 }], x => x.count)
 
 ---
 title: countOccurrences
-tags: array,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-18T23:04:45+03:00
 ---
 
 Counts the occurrences of a value in an array.
@@ -2202,9 +3197,6 @@ countOccurrences([1, 1, 2, 1, 2, 3], 1); // 3
 
 ---
 title: countSubstrings
-tags: string,algorithm,beginner
-firstSeen: 2020-12-31T13:58:51+02:00
-lastUpdated: 2021-01-08T00:23:44+02:00
 ---
 
 Counts the occurrences of a substring in a given string.
@@ -2232,9 +3224,6 @@ countSubstrings('tutut tut tut', 'tut'); // 4
 
 ---
 title: countWeekDaysBetween
-tags: date,intermediate
-firstSeen: 2020-10-11T11:44:44+03:00
-lastUpdated: 2020-10-20T11:21:07+03:00
 ---
 
 Counts the weekdays between two dates.
@@ -2262,9 +3251,6 @@ countWeekDaysBetween(new Date('Oct 05, 2020'), new Date('Oct 14, 2020')); // 7
 
 ---
 title: counter
-tags: browser,advanced
-firstSeen: 2018-05-06T17:55:46+03:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Creates a counter with the specified range, step and duration for the specified selector.
@@ -2296,9 +3282,6 @@ counter('#my-id', 1, 1000, 5, 2000);
 
 ---
 title: createDirIfNotExists
-tags: node,beginner
-firstSeen: 2018-12-12T19:25:16+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Creates a directory, if it does not exist.
@@ -2318,9 +3301,6 @@ createDirIfNotExists('test');
 
 ---
 title: createElement
-tags: browser,beginner
-firstSeen: 2018-01-05T18:21:44+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Creates an element from a string (without appending it to the document).
@@ -2349,9 +3329,6 @@ console.log(el.className); // 'container'
 
 ---
 title: createEventHub
-tags: browser,event,advanced
-firstSeen: 2018-01-05T15:07:26+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Creates a pub/sub ([publish–subscribe](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)) event hub with `emit`, `on`, and `off` methods.
@@ -2401,9 +3378,6 @@ hub.off('message', handler);
 
 ---
 title: currentURL
-tags: browser,beginner
-firstSeen: 2017-12-18T11:05:03+02:00
-lastUpdated: 2020-10-20T11:46:23+03:00
 ---
 
 Returns the current URL.
@@ -2420,9 +3394,6 @@ currentURL(); // 'https://www.google.com/'
 
 ---
 title: curry
-tags: function,recursion,advanced
-firstSeen: 2017-12-10T15:21:35+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Curries a function.
@@ -2444,9 +3415,6 @@ curry(Math.min, 3)(10)(50)(2); // 2
 
 ---
 title: cycleGenerator
-tags: function,generator,advanced
-firstSeen: 2020-10-11T17:05:38+03:00
-lastUpdated: 2020-10-11T17:05:38+03:00
 ---
 
 Creates a generator, looping over the given array indefinitely.
@@ -2474,8 +3442,6 @@ binaryCycle.next(); // { value: 1, done: false }
 
 ---
 title: dateRangeGenerator
-tags: date,function,generator,advanced
-firstSeen: 2021-06-21T05:00:00-04:00
 ---
 
 Creates a generator, that generates all dates in the given range using the given step.
@@ -2501,9 +3467,6 @@ const dateRangeGenerator = function* (start, end, step = 1) {
 
 ---
 title: dayName
-tags: date,beginner
-firstSeen: 2020-10-04T00:31:08+03:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Gets the name of the weekday from a `Date` object.
@@ -2523,9 +3486,6 @@ dayName(new Date('09/23/2020'), 'de-DE'); // 'Samstag'
 
 ---
 title: dayOfYear
-tags: date,beginner
-firstSeen: 2018-09-29T13:22:20+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Gets the day of the year (number in the range 1-366) from a `Date` object.
@@ -2545,9 +3505,6 @@ dayOfYear(new Date()); // 272
 
 ---
 title: daysAgo
-tags: date,beginner
-firstSeen: 2020-10-06T05:35:23+03:00
-lastUpdated: 2020-10-20T11:21:07+03:00
 ---
 
 Calculates the date of `n` days ago from today as a string representation.
@@ -2569,9 +3526,6 @@ daysAgo(20); // 2020-09-16 (if current date is 2020-10-06)
 
 ---
 title: daysFromNow
-tags: date,beginner
-firstSeen: 2020-10-09T02:49:17+03:00
-lastUpdated: 2020-10-20T11:21:07+03:00
 ---
 
 Calculates the date of `n` days from today as a string representation.
@@ -2593,8 +3547,6 @@ daysFromNow(5); // 2020-10-13 (if current date is 2020-10-08)
 
 ---
 title: daysInMonth
-tags: date,beginner
-firstSeen: 2021-06-13T05:00:00-04:00
 ---
 
 Gets the number of days in the given `month` of the specified `year`.
@@ -2614,9 +3566,6 @@ daysInMonth(2024, 2)); // 29
 
 ---
 title: debounce
-tags: function,intermediate
-firstSeen: 2018-01-28T15:18:26+02:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Creates a debounced function that delays invoking the provided function until at least `ms` milliseconds have elapsed since its last invocation.
@@ -2647,9 +3596,6 @@ window.addEventListener(
 
 ---
 title: debouncePromise
-tags: function,promise,advanced
-firstSeen: 2020-10-10T21:09:04+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Creates a debounced function that returns a promise, but delays invoking the provided function until at least `ms` milliseconds have elapsed since the last time it was invoked. 
@@ -2698,9 +3644,6 @@ debounced('bar').then(console.log);
 
 ---
 title: decapitalize
-tags: string,intermediate
-firstSeen: 2018-01-11T11:58:40+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Decapitalizes the first letter of a string.
@@ -2721,9 +3664,6 @@ decapitalize('FooBar', true); // 'fOOBAR'
 
 ---
 title: deepClone
-tags: object,recursion,advanced
-firstSeen: 2018-01-23T20:48:46+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Creates a deep clone of an object. 
@@ -2759,9 +3699,6 @@ const b = deepClone(a); // a !== b, a.obj !== b.obj
 
 ---
 title: deepFlatten
-tags: array,recursion,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Deep flattens an array.
@@ -2781,9 +3718,6 @@ deepFlatten([1, [2], [[3], 4], 5]); // [1, 2, 3, 4, 5]
 
 ---
 title: deepFreeze
-tags: object,recursion,intermediate
-firstSeen: 2018-08-25T18:54:16+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Deep freezes an object.
@@ -2812,9 +3746,6 @@ val[1][0] = 4; // not allowed as well
 
 ---
 title: deepGet
-tags: object,intermediate
-firstSeen: 2019-05-09T13:30:52+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Gets the target value in a nested JSON object, based on the `keys` array.
@@ -2847,9 +3778,6 @@ deepGet(data, ['foo', 'bar', 'baz', 8, 'foz']); // null
 
 ---
 title: deepMapKeys
-tags: object,recursion,advanced
-firstSeen: 2018-11-29T15:22:53+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Deep maps an object's keys.
@@ -2905,8 +3833,6 @@ const upperKeysObj = deepMapKeys(obj, key => key.toUpperCase());
 
 ---
 title: deepMerge
-tags: object,function,advanced
-firstSeen: 2021-07-25T05:00:00-04:00
 ---
 
 Deeply merges two objects, using a function to handle keys present in both.
@@ -2933,9 +3859,6 @@ deepMerge(
 
 ---
 title: defaults
-tags: object,intermediate
-firstSeen: 2018-01-19T13:51:05+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Assigns default values for all properties in an object that are `undefined`.
@@ -2955,9 +3878,6 @@ defaults({ a: 1 }, { b: 2 }, { b: 6 }, { a: 3 }); // { a: 1, b: 2 }
 
 ---
 title: defer
-tags: function,intermediate
-firstSeen: 2018-01-01T23:40:31+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Defers invoking a function until the current call stack has cleared.
@@ -2983,9 +3903,6 @@ defer(longRunningFunction);
 
 ---
 title: degreesToRads
-tags: math,beginner
-firstSeen: 2018-02-14T12:24:50+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Converts an angle from degrees to radians.
@@ -3001,9 +3918,6 @@ degreesToRads(90.0); // ~1.5708
 ```
 ---
 title: delay
-tags: function,intermediate
-firstSeen: 2018-01-24T14:32:20+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Invokes the provided function after `ms` milliseconds.
@@ -3027,9 +3941,6 @@ delay(
 
 ---
 title: detectDeviceType
-tags: browser,regexp,intermediate
-firstSeen: 2017-12-24T09:39:23+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Detects whether the page is being viewed on a mobile device or a desktop.
@@ -3051,9 +3962,6 @@ detectDeviceType(); // 'Mobile' or 'Desktop'
 
 ---
 title: detectLanguage
-tags: browser,intermediate
-firstSeen: 2020-10-05T18:03:26+03:00
-lastUpdated: 2020-10-06T18:47:16+03:00
 ---
 
 Detects the preferred language of the current user.
@@ -3074,9 +3982,6 @@ detectLanguage(); // 'nl-NL'
 
 ---
 title: difference
-tags: array,beginner
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Calculates the difference between two arrays, without filtering duplicate values.
@@ -3097,9 +4002,6 @@ difference([1, 2, 3, 3], [1, 2, 4]); // [3, 3]
 
 ---
 title: differenceBy
-tags: array,intermediate
-firstSeen: 2018-01-24T11:49:03+02:00
-lastUpdated: 2020-10-19T18:52:00+03:00
 ---
 
 Returns the difference between two arrays, after applying the provided function to each array element of both.
@@ -3122,9 +4024,6 @@ differenceBy([{ x: 2 }, { x: 1 }], [{ x: 1 }], v => v.x); // [2]
 
 ---
 title: differenceWith
-tags: array,intermediate
-firstSeen: 2017-12-19T12:32:24+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Filters out all values from an array for which the comparator function does not return `true`.
@@ -3148,9 +4047,6 @@ differenceWith([1, 1.2, 1.3], [1, 1.3, 1.5]); // [1.2]
 
 ---
 title: dig
-tags: object,recursion,intermediate
-firstSeen: 2018-07-08T23:06:24+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Gets the target value in a nested JSON object, based on the given key.
@@ -3183,9 +4079,6 @@ dig(data, 'level4'); // undefined
 
 ---
 title: digitize
-tags: math,beginner
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-18T14:58:09+03:00
 ---
 
 Converts a number to an array of digits, removing its sign if necessary.
@@ -3205,9 +4098,6 @@ digitize(-123); // [1, 2, 3]
 
 ---
 title: distance
-tags: math,algorithm,beginner
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-12-28T13:49:24+02:00
 ---
 
 Calculates the distance between two points.
@@ -3224,9 +4114,6 @@ distance(1, 1, 2, 3); // ~2.2361
 
 ---
 title: divmod
-tags: math,beginner
-firstSeen: 2020-10-07T23:59:13+03:00
-lastUpdated: 2020-10-07T23:59:13+03:00
 ---
 
 Returns an array consisting of the quotient and remainder of the given numbers.
@@ -3246,9 +4133,6 @@ divmod(5, 5); // [1, 0]
 
 ---
 title: drop
-tags: array,beginner
-firstSeen: 2018-01-26T12:23:18+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Creates a new array with `n` elements removed from the left.
@@ -3268,9 +4152,6 @@ drop([1, 2, 3], 42); // []
 
 ---
 title: dropRight
-tags: array,beginner
-firstSeen: 2017-12-19T12:06:47+02:00
-lastUpdated: 2020-11-01T20:50:57+02:00
 ---
 
 Creates a new array with `n` elements removed from the right.
@@ -3290,9 +4171,6 @@ dropRight([1, 2, 3], 42); // []
 
 ---
 title: dropRightWhile
-tags: array,intermediate
-firstSeen: 2018-01-26T12:23:18+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Removes elements from the end of an array until the passed function returns `true`.
@@ -3315,9 +4193,6 @@ dropRightWhile([1, 2, 3, 4], n => n < 3); // [1, 2]
 
 ---
 title: dropWhile
-tags: array,intermediate
-firstSeen: 2018-01-26T12:23:18+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Removes elements in an array until the passed function returns `true`.
@@ -3339,9 +4214,6 @@ dropWhile([1, 2, 3, 4], n => n >= 3); // [3, 4]
 
 ---
 title: either
-tags: function,logic,beginner
-firstSeen: 2020-05-13T11:35:46+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Checks if at least one function returns `true` for a given set of arguments.
@@ -3362,9 +4234,6 @@ isPositiveOrEven(3); // true
 
 ---
 title: elementContains
-tags: browser,intermediate
-firstSeen: 2018-06-19T20:57:58+03:00
-lastUpdated: 2020-11-03T22:11:18+02:00
 ---
 
 Checks if the `parent` element contains the `child` element.
@@ -3389,9 +4258,6 @@ elementContains(document.querySelector('body'), document.querySelector('body'));
 
 ---
 title: elementIsFocused
-tags: browser,beginner
-firstSeen: 2020-08-07T15:21:27+03:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Checks if the given element is focused.
@@ -3408,9 +4274,6 @@ elementIsFocused(el); // true if the element is focused
 
 ---
 title: elementIsVisibleInViewport
-tags: browser,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Checks if the element specified is visible in the viewport.
@@ -3438,9 +4301,6 @@ elementIsVisibleInViewport(el, true); // true - (partially visible)
 
 ---
 title: equals
-tags: object,array,type,recursion,advanced
-firstSeen: 2018-01-15T18:34:11+02:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Performs a deep comparison between two values to determine if they are equivalent.
@@ -3481,9 +4341,6 @@ equals([1, 2, 3], { 0: 1, 1: 2, 2: 3 }); // true
 
 ---
 title: escapeHTML
-tags: string,browser,regexp,intermediate
-firstSeen: 2017-12-29T15:09:21+02:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Escapes a string for use in HTML.
@@ -3513,9 +4370,6 @@ escapeHTML('<a href="#">Me & you</a>');
 
 ---
 title: escapeRegExp
-tags: string,regexp,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Escapes a string to use in a regular expression.
@@ -3532,9 +4386,6 @@ escapeRegExp('(test)'); // \\(test\\)
 
 ---
 title: euclideanDistance
-tags: math,algorithm,intermediate
-firstSeen: 2020-12-28T13:41:19+02:00
-lastUpdated: 2020-12-28T13:41:19+02:00
 ---
 
 Calculates the distance between two points in any number of dimensions.
@@ -3554,9 +4405,6 @@ euclideanDistance([1, 1, 1], [2, 3, 2]); // ~2.4495
 
 ---
 title: everyNth
-tags: array,beginner
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Returns every `nth` element in an array.
@@ -3573,9 +4421,6 @@ everyNth([1, 2, 3, 4, 5, 6], 2); // [ 2, 4, 6 ]
 
 ---
 title: expandTabs
-tags: string,regexp,beginner
-firstSeen: 2020-06-01T17:05:39+03:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Convert tabs to spaces, where each tab corresponds to `count` spaces.
@@ -3592,9 +4437,6 @@ expandTabs('\t\tlorem', 3); // '      lorem'
 
 ---
 title: extendHex
-tags: string,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-09-15T16:28:04+03:00
 ---
 
 Extends a 3-digit color code to a 6-digit color code.
@@ -3619,9 +4461,6 @@ extendHex('05a'); // '#0055aa'
 
 ---
 title: factorial
-tags: math,algorithm,recursion,beginner
-firstSeen: 2017-12-07T14:41:33+02:00
-lastUpdated: 2020-12-28T13:49:24+02:00
 ---
 
 Calculates the factorial of a number.
@@ -3648,10 +4487,7 @@ factorial(6); // 720
 
 ---
 title: fahrenheitToCelsius
-tags: math,beginner
 unlisted: true
-firstSeen: 2020-04-16T11:00:06+03:00
-lastUpdated: 2021-01-04T13:04:15+02:00
 ---
 
 Converts Fahrenheit to Celsius.
@@ -3668,9 +4504,6 @@ fahrenheitToCelsius(32); // 0
 
 ---
 title: fibonacci
-tags: math,algorithm,intermediate
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-12-28T13:49:24+02:00
 ---
 
 Generates an array, containing the Fibonacci sequence, up until the nth term.
@@ -3692,9 +4525,6 @@ fibonacci(6); // [0, 1, 1, 2, 3, 5]
 
 ---
 title: filterNonUnique
-tags: array,beginner
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-11-02T19:40:45+02:00
 ---
 
 Creates an array with the non-unique values filtered out.
@@ -3713,9 +4543,6 @@ filterNonUnique([1, 2, 2, 3, 4, 4, 5]); // [1, 3, 5]
 
 ---
 title: filterNonUniqueBy
-tags: array,intermediate
-firstSeen: 2018-07-18T20:40:53+03:00
-lastUpdated: 2020-11-02T19:40:27+02:00
 ---
 
 Creates an array with the non-unique values filtered out, based on a provided comparator function.
@@ -3743,9 +4570,6 @@ filterNonUniqueBy(
 
 ---
 title: filterUnique
-tags: array,beginner
-firstSeen: 2020-11-02T19:41:00+02:00
-lastUpdated: 2020-11-02T19:41:00+02:00
 ---
 
 Creates an array with the unique values filtered out.
@@ -3764,9 +4588,6 @@ filterUnique([1, 2, 2, 3, 4, 4, 5]); // [2, 4]
 
 ---
 title: filterUniqueBy
-tags: array,intermediate
-firstSeen: 2020-11-02T19:41:07+02:00
-lastUpdated: 2020-11-02T19:41:07+02:00
 ---
 
 Creates an array with the unique values filtered out, based on a provided comparator function.
@@ -3794,9 +4615,6 @@ filterUniqueBy(
 
 ---
 title: findClosestAnchor
-tags: browser,intermediate
-firstSeen: 2021-04-22T08:45:39+03:00
-lastUpdated: 2021-04-22T08:45:39+03:00
 ---
 
 Finds the anchor node closest to the given `node`, if any.
@@ -3819,9 +4637,6 @@ findClosestAnchor(document.querySelector('a > span')); // a
 
 ---
 title: findClosestMatchingNode
-tags: browser,intermediate
-firstSeen: 2021-04-22T08:45:39+03:00
-lastUpdated: 2021-04-22T08:45:39+03:00
 ---
 
 Finds the closest matching node starting at the given `node`.
@@ -3844,9 +4659,6 @@ findClosestMatchingNode(document.querySelector('span'), 'body'); // body
 
 ---
 title: findFirstN
-tags: array,intermediate
-firstSeen: 2021-05-09T13:31:36+03:00
-lastUpdated: 2021-05-09T13:31:36+03:00
 ---
 
 Finds the first `n` elements for which the provided function returns a truthy value.
@@ -3874,9 +4686,6 @@ findFirstN([1, 2, 4, 6], n => n % 2 === 0, 5); // [2, 4, 6]
 
 ---
 title: findKey
-tags: object,intermediate
-firstSeen: 2018-01-23T18:23:20+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Finds the first key that satisfies the provided testing function.
@@ -3903,9 +4712,6 @@ findKey(
 
 ---
 title: findKeys
-tags: object,beginner
-firstSeen: 2020-10-25T09:59:13+02:00
-lastUpdated: 2020-11-15T14:43:44+02:00
 ---
 
 Finds all the keys in the provided object that match the given value.
@@ -3930,9 +4736,6 @@ findKeys(ages, 20); // [ 'Leo', 'Jane' ]
 
 ---
 title: findLast
-tags: array,beginner
-firstSeen: 2018-01-11T13:51:58+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Finds the last element for which the provided function returns a truthy value.
@@ -3950,9 +4753,6 @@ findLast([1, 2, 3, 4], n => n % 2 === 1); // 3
 
 ---
 title: findLastIndex
-tags: array,intermediate
-firstSeen: 2018-01-24T13:01:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Finds the index of the last element for which the provided function returns a truthy value.
@@ -3977,9 +4777,6 @@ findLastIndex([1, 2, 3, 4], n => n === 5); // -1 (default value when not found)
 
 ---
 title: findLastKey
-tags: object,intermediate
-firstSeen: 2018-01-23T18:23:20+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Finds the last key that satisfies the provided testing function.
@@ -4009,9 +4806,6 @@ findLastKey(
 
 ---
 title: findLastN
-tags: array,intermediate
-firstSeen: 2021-05-09T13:31:36+03:00
-lastUpdated: 2021-05-09T13:31:36+03:00
 ---
 
 Finds the last `n` elements for which the provided function returns a truthy value.
@@ -4039,9 +4833,6 @@ findLastN([1, 2, 4, 6], n => n % 2 === 0, 5); // [2, 4, 6]
 
 ---
 title: flatten
-tags: array,recursion,intermediate
-firstSeen: 2017-12-17T16:41:31+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Flattens an array up to the specified depth.
@@ -4067,9 +4858,6 @@ flatten([1, [2, [3, [4, 5], 6], 7], 8], 2); // [1, 2, 3, [4, 5], 6, 7, 8]
 
 ---
 title: flattenObject
-tags: object,recursion,advanced
-firstSeen: 2018-02-07T11:30:18+02:00
-lastUpdated: 2020-10-19T18:51:03+03:00
 ---
 
 Flattens an object with the paths for keys.
@@ -4101,9 +4889,6 @@ flattenObject({ a: { b: { c: 1 } }, d: 1 }); // { 'a.b.c': 1, d: 1 }
 
 ---
 title: flip
-tags: function,intermediate
-firstSeen: 2017-12-22T02:42:15+02:00
-lastUpdated: 2021-06-13T13:50:25+03:00
 ---
 
 Takes a function as an argument, then makes the first argument the last.
@@ -4127,9 +4912,6 @@ Object.assign(b, a); // == b
 
 ---
 title: forEachRight
-tags: array,intermediate
-firstSeen: 2018-01-09T01:38:50+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Executes a provided function once for each array element, starting from the array's last element.
@@ -4151,9 +4933,6 @@ forEachRight([1, 2, 3, 4], val => console.log(val)); // '4', '3', '2', '1'
 
 ---
 title: forOwn
-tags: object,intermediate
-firstSeen: 2018-01-18T16:45:56+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Iterates over all own properties of an object, running a callback for each one.
@@ -4173,9 +4952,6 @@ forOwn({ foo: 'bar', a: 1 }, v => console.log(v)); // 'bar', 1
 
 ---
 title: forOwnRight
-tags: object,intermediate
-firstSeen: 2018-01-18T16:45:56+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Iterates over all own properties of an object in reverse, running a callback for each one.
@@ -4197,9 +4973,6 @@ forOwnRight({ foo: 'bar', a: 1 }, v => console.log(v)); // 1, 'bar'
 
 ---
 title: formToObject
-tags: browser,object,intermediate
-firstSeen: 2019-03-13T14:50:06+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Encodes a set of form elements as an `object`.
@@ -4225,9 +4998,6 @@ formToObject(document.querySelector('#form'));
 
 ---
 title: formatDuration
-tags: date,math,string,intermediate
-firstSeen: 2018-01-04T09:26:42+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Returns the human-readable format of the given number of milliseconds.
@@ -4262,9 +5032,6 @@ formatDuration(34325055574);
 
 ---
 title: formatNumber
-tags: string,math,beginner
-firstSeen: 2020-07-30T11:38:51+03:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Formats a number using the local number format order.
@@ -4282,9 +5049,6 @@ formatNumber(15675436903); // '15.675.436.903' in `de-DE`
 
 ---
 title: formatSeconds
-tags: date,math,string,intermediate
-firstSeen: 2021-05-09T12:44:55+03:00
-lastUpdated: 2021-10-13T19:29:39+02:00
 ---
 
 Returns the ISO format of the given number of seconds.
@@ -4318,9 +5082,6 @@ formatSeconds(99999); // '27:46:39'
 
 ---
 title: frequencies
-tags: array,object,intermediate
-firstSeen: 2020-01-03T15:32:35+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Creates an object with the unique values of an array as keys and their frequencies as the values.
@@ -4342,9 +5103,6 @@ frequencies([...'ball']); // { b: 1, a: 1, l: 2 }
 
 ---
 title: fromCamelCase
-tags: string,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Converts a string from camelcase.
@@ -4370,9 +5128,6 @@ fromCamelCase('JSONToCSV', '.'); // 'json.to.csv'
 
 ---
 title: fromTimestamp
-tags: date,beginner
-firstSeen: 2020-10-15T21:57:17+03:00
-lastUpdated: 2020-10-15T21:57:17+03:00
 ---
 
 Creates a `Date` object from a Unix timestamp.
@@ -4390,9 +5145,6 @@ fromTimestamp(1602162242); // 2020-10-08T13:04:02.000Z
 
 ---
 title: frozenSet
-tags: array,intermediate
-firstSeen: 2020-10-11T11:52:48+03:00
-lastUpdated: 2020-10-11T11:52:48+03:00
 ---
 
 Creates a frozen `Set` object.
@@ -4417,9 +5169,6 @@ frozenSet([1, 2, 3, 1, 2]);
 
 ---
 title: fullscreen
-tags: browser,intermediate
-firstSeen: 2020-10-04T16:48:00+03:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Opens or closes an element in fullscreen mode.
@@ -4443,9 +5192,6 @@ fullscreen(false); // Exits fullscreen mode
 
 ---
 title: functionName
-tags: function,beginner
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Logs the name of a function.
@@ -4465,9 +5211,6 @@ let m = functionName(Math.max)(5, 6);
 
 ---
 title: functions
-tags: object,function,advanced
-firstSeen: 2018-01-11T21:18:58+02:00
-lastUpdated: 2020-10-20T11:21:07+03:00
 ---
 
 Gets an array of function property names from own (and optionally inherited) enumerable properties of an object.
@@ -4497,9 +5240,6 @@ functions(new Foo(), true); // ['a', 'b', 'c']
 
 ---
 title: gcd
-tags: math,algorithm,recursion,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2020-12-29T12:36:50+02:00
 ---
 
 Calculates the greatest common divisor between two or more numbers/arrays.
@@ -4522,9 +5262,6 @@ gcd(...[12, 8, 32]); // 4
 
 ---
 title: generateItems
-tags: array,function,intermediate
-firstSeen: 2020-10-09T20:41:21+03:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Generates an array with the given amount of items, using the given function.
@@ -4543,9 +5280,6 @@ generateItems(10, Math.random);
 
 ---
 title: generatorToArray
-tags: function,array,generator,beginner
-firstSeen: 2020-12-31T13:22:18+02:00
-lastUpdated: 2020-12-31T13:22:18+02:00
 ---
 
 Converts the output of a generator function to an array.
@@ -4563,9 +5297,6 @@ generatorToArray(s.entries()); // [[ 1, 1 ], [ 2, 2 ], [ 3, 3 ], [ 4, 4 ]]
 
 ---
 title: geometricProgression
-tags: math,algorithm,intermediate
-firstSeen: 2018-01-03T09:36:23+02:00
-lastUpdated: 2020-12-28T13:49:24+02:00
 ---
 
 Initializes an array containing the numbers in the specified range where `start` and `end` are inclusive and the ratio between two terms is `step`.
@@ -4590,9 +5321,6 @@ geometricProgression(256, 1, 4); // [1, 4, 16, 64, 256]
 
 ---
 title: get
-tags: object,regexp,intermediate
-firstSeen: 2018-01-18T17:40:42+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Retrieves a set of properties indicated by the given selectors from an object.
@@ -4623,9 +5351,6 @@ get(obj, 'selector.to.val', 'target[0]', 'target[2].a');
 
 ---
 title: getAncestors
-tags: browser,beginner
-firstSeen: 2020-10-15T09:28:34+03:00
-lastUpdated: 2021-01-05T22:45:34+02:00
 ---
 
 Returns all the ancestors of an element from the document root to the given element.
@@ -4651,9 +5376,6 @@ getAncestors(document.querySelector('nav'));
 
 ---
 title: getBaseURL
-tags: string,browser,regexp,beginner
-firstSeen: 2020-05-03T12:20:54+03:00
-lastUpdated: 2021-01-03T20:32:13+02:00
 ---
 
 Gets the current URL without any parameters or fragment identifiers.
@@ -4671,9 +5393,6 @@ getBaseURL('http://url.com/page?name=Adam&surname=Smith');
 
 ---
 title: getColonTimeFromDate
-tags: date,string,beginner
-firstSeen: 2018-01-13T17:14:48+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Returns a string of the form `HH:MM:SS` from a `Date` object.
@@ -4690,9 +5409,6 @@ getColonTimeFromDate(new Date()); // '08:38:00'
 
 ---
 title: getDaysDiffBetweenDates
-tags: date,intermediate
-firstSeen: 2017-12-17T17:55:51+02:00
-lastUpdated: 2021-04-24T12:42:47+03:00
 ---
 
 Calculates the difference (in days) between two dates.
@@ -4710,9 +5426,6 @@ getDaysDiffBetweenDates(new Date('2017-12-13'), new Date('2017-12-22')); // 9
 
 ---
 title: getElementsBiggerThanViewport
-tags: browser,intermediate
-firstSeen: 2020-10-06T17:41:22+03:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Returns an array of HTML elements whose width is larger than that of the viewport's.
@@ -4735,9 +5448,6 @@ getElementsBiggerThanViewport(); // <div id="ultra-wide-item" />
 
 ---
 title: getHoursDiffBetweenDates
-tags: date,beginner
-firstSeen: 2021-04-24T12:56:21+03:00
-lastUpdated: 2021-04-24T12:56:21+03:00
 ---
 
 Calculates the difference (in hours) between two dates.
@@ -4758,9 +5468,6 @@ getHoursDiffBetweenDates(
 
 ---
 title: getImages
-tags: browser,intermediate
-firstSeen: 2018-10-07T16:24:36+03:00
-lastUpdated: 2020-10-22T20:23:47+03:00
 ---
 
 Fetches all images from within an element and puts them into an array.
@@ -4786,9 +5493,6 @@ getImages(document, false); // ['image1.jpg', 'image2.png', '...']
 
 ---
 title: getMeridiemSuffixOfInteger
-tags: date,beginner
-firstSeen: 2018-01-13T17:14:48+02:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Converts an integer to a suffixed string, adding `am` or `pm` based on its value.
@@ -4815,9 +5519,6 @@ getMeridiemSuffixOfInteger(25); // '1pm'
 
 ---
 title: getMinutesDiffBetweenDates
-tags: date,beginner
-firstSeen: 2021-04-24T12:48:49+03:00
-lastUpdated: 2021-04-24T12:48:49+03:00
 ---
 
 Calculates the difference (in minutes) between two dates.
@@ -4838,9 +5539,6 @@ getMinutesDiffBetweenDates(
 
 ---
 title: getMonthsDiffBetweenDates
-tags: date,intermediate
-firstSeen: 2020-08-07T15:15:26+03:00
-lastUpdated: 2020-10-19T22:49:51+03:00
 ---
 
 Calculates the difference (in months) between two dates.
@@ -4861,3 +5559,917 @@ const getMonthsDiffBetweenDates = (dateInitial, dateFinal) =>
 getMonthsDiffBetweenDates(new Date('2017-12-13'), new Date('2018-04-29')); // 4
 ```
 
+---
+title: getParentsUntil
+---
+
+Finds all the ancestors of an element up until the element matched by the specified selector.
+
+- Use `Node.parentNode` and a `while` loop to move up the ancestor tree of the element.
+- Use `Array.prototype.unshift()` to add each new ancestor to the start of the array.
+- Use `Element.matches()` to check if the current element matches the specified `selector`.
+
+```js
+const getParentsUntil = (el, selector) => {
+  let parents = [],
+    _el = el.parentNode;
+  while (_el && typeof _el.matches === 'function') {
+    parents.unshift(_el);
+    if (_el.matches(selector)) return parents;
+    else _el = _el.parentNode;
+  }
+  return [];
+};
+```
+
+```js
+getParentsUntil(document.querySelector('#home-link'), 'header');
+// [header, nav, ul, li]
+```
+
+---
+title: getProtocol
+---
+
+Gets the protocol being used on the current page.
+
+- Use `Window.location.protocol` to get the protocol (`http:` or `https:`) of the current page.
+
+```js
+const getProtocol = () => window.location.protocol;
+```
+
+```js
+getProtocol(); // 'https:'
+```
+
+---
+title: getScrollPosition
+---
+
+Returns the scroll position of the current page.
+
+- Use `Window.pageXOffset` and `Window.pageYOffset` if they are defined, otherwise `Element.scrollLeft` and `Element.scrollTop`.
+- Omit the single argument, `el`, to use a default value of `window`.
+
+```js
+const getScrollPosition = (el = window) => ({
+  x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
+  y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
+});
+```
+
+```js
+getScrollPosition(); // {x: 0, y: 200}
+```
+
+---
+title: getSecondsDiffBetweenDates
+---
+
+Calculates the difference (in seconds) between two dates.
+
+- Subtract the two `Date` objects and divide by the number of milliseconds in a second to get the difference (in seconds) between them.
+
+```js
+const getSecondsDiffBetweenDates = (dateInitial, dateFinal) =>
+  (dateFinal - dateInitial) / 1000;
+```
+
+```js
+getSecondsDiffBetweenDates(
+  new Date('2020-12-24 00:00:15'),
+  new Date('2020-12-24 00:00:17')
+); // 2
+```
+
+---
+title: getSelectedText
+---
+
+Gets the currently selected text.
+
+- Use `Window.getSelection()` and `Selection.toString()` to get the currently selected text.
+
+```js
+const getSelectedText = () => window.getSelection().toString();
+```
+
+```js
+getSelectedText(); // 'Lorem ipsum'
+```
+
+---
+title: getSiblings
+---
+
+Returns an array containing all the siblings of the given element.
+
+- Use `Node.parentNode` and `Node.childNodes` to get a `NodeList` of all the elements contained in the element's parent.
+- Use the spread operator (`...`) and `Array.prototype.filter()` to convert to an array and remove the given element from it.
+
+```js
+const getSiblings = el =>
+  [...el.parentNode.childNodes].filter(node => node !== el);
+```
+
+```js
+getSiblings(document.querySelector('head')); // ['body']
+```
+
+---
+title: getStyle
+---
+
+Retrieves the value of a CSS rule for the specified element.
+
+- Use `Window.getComputedStyle()` to get the value of the CSS rule for the specified element.
+
+```js
+const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName];
+```
+
+```js
+getStyle(document.querySelector('p'), 'font-size'); // '16px'
+```
+
+---
+title: getTimestamp
+---
+
+Gets the Unix timestamp from a `Date` object.
+
+- Use `Date.prototype.getTime()` to get the timestamp in milliseconds and divide by `1000` to get the timestamp in seconds.
+- Use `Math.floor()` to appropriately round the resulting timestamp to an integer.
+- Omit the argument, `date`, to use the current date.
+
+```js
+const getTimestamp = (date = new Date()) => Math.floor(date.getTime() / 1000);
+```
+
+```js
+getTimestamp(); // 1602162242
+```
+
+---
+title: getType
+---
+
+Returns the native type of a value.
+
+- Return `'undefined'` or `'null'` if the value is `undefined` or `null`.
+- Otherwise, use `Object.prototype.constructor.name` to get the name of the constructor.
+
+```js
+const getType = v =>
+  (v === undefined ? 'undefined' : v === null ? 'null' : v.constructor.name);
+```
+
+```js
+getType(new Set([1, 2, 3])); // 'Set'
+```
+
+---
+title: getURLParameters
+---
+
+Creates an object containing the parameters of the current URL.
+
+- Use `String.prototype.match()` with an appropriate regular expression to get all key-value pairs.
+- Use `Array.prototype.reduce()` to map and combine them into a single object.
+- Pass `location.search` as the argument to apply to the current `url`.
+
+```js
+const getURLParameters = url =>
+  (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
+    (a, v) => (
+      (a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a
+    ),
+    {}
+  );
+```
+
+```js
+getURLParameters('google.com'); // {}
+getURLParameters('http://url.com/page?name=Adam&surname=Smith');
+// {name: 'Adam', surname: 'Smith'}
+```
+
+---
+title: getVerticalOffset
+---
+
+Finds the distance from a given element to the top of the document.
+
+- Use a `while` loop and `HTMLElement.offsetParent` to move up the offset parents of the given element.
+- Add `HTMLElement.offsetTop` for each element and return the result.
+
+```js
+const getVerticalOffset = el => {
+  let offset = el.offsetTop,
+    _el = el;
+  while (_el.offsetParent) {
+    _el = _el.offsetParent;
+    offset += _el.offsetTop;
+  }
+  return offset;
+};
+```
+
+```js
+getVerticalOffset('.my-element'); // 120
+```
+
+---
+title: groupBy
+---
+
+Groups the elements of an array based on the given function.
+
+- Use `Array.prototype.map()` to map the values of the array to a function or property name.
+- Use `Array.prototype.reduce()` to create an object, where the keys are produced from the mapped results.
+
+```js
+const groupBy = (arr, fn) =>
+  arr
+    .map(typeof fn === 'function' ? fn : val => val[fn])
+    .reduce((acc, val, i) => {
+      acc[val] = (acc[val] || []).concat(arr[i]);
+      return acc;
+    }, {});
+```
+
+```js
+groupBy([6.1, 4.2, 6.3], Math.floor); // {4: [4.2], 6: [6.1, 6.3]}
+groupBy(['one', 'two', 'three'], 'length'); // {3: ['one', 'two'], 5: ['three']}
+```
+
+---
+title: hammingDistance
+---
+
+Calculates the Hamming distance between two values.
+
+- Use the XOR operator (`^`) to find the bit difference between the two numbers.
+- Convert to a binary string using `Number.prototype.toString(2)`.
+- Count and return the number of `1`s in the string, using `String.prototype.match(/1/g)`.
+
+```js
+const hammingDistance = (num1, num2) =>
+  ((num1 ^ num2).toString(2).match(/1/g) || '').length;
+```
+
+```js
+hammingDistance(2, 3); // 1
+```
+
+---
+title: hasClass
+---
+
+Checks if the given element has the specified class.
+
+- Use `Element.classList` and `DOMTokenList.contains()` to check if the element has the specified class.
+
+```js
+const hasClass = (el, className) => el.classList.contains(className);
+```
+
+```js
+hasClass(document.querySelector('p.special'), 'special'); // true
+```
+
+---
+title: hasDuplicates
+---
+
+Checks if there are duplicate values in a flat array.
+
+- Use `Set()` to get the unique values in the array.
+- Use `Set.prototype.size` and `Array.prototype.length` to check if the count of the unique values is the same as elements in the original array.
+
+```js
+const hasDuplicates = arr => new Set(arr).size !== arr.length;
+```
+
+```js
+hasDuplicates([0, 1, 1, 2]); // true
+hasDuplicates([0, 1, 2, 3]); // false
+```
+
+---
+title: hasFlags
+---
+
+Checks if the current process's arguments contain the specified flags.
+
+- Use `Array.prototype.every()` and `Array.prototype.includes()` to check if `process.argv` contains all the specified flags.
+- Use a regular expression to test if the specified flags are prefixed with `-` or `--` and prefix them accordingly.
+
+```js
+const hasFlags = (...flags) =>
+  flags.every(flag =>
+    process.argv.includes(/^-{1,2}/.test(flag) ? flag : '--' + flag)
+  );
+```
+
+```js
+// node myScript.js -s --test --cool=true
+hasFlags('-s'); // true
+hasFlags('--test', 'cool=true', '-s'); // true
+hasFlags('special'); // false
+```
+
+---
+title: hasKey
+---
+
+Checks if the target value exists in a JSON object.
+
+- Check if `keys` is non-empty and use `Array.prototype.every()` to sequentially check its keys to internal depth of the object, `obj`.
+- Use `Object.prototype.hasOwnProperty()` to check if `obj` does not have the current key or is not an object, stop propagation and return `false`.
+- Otherwise assign the key's value to `obj` to use on the next iteration.
+- Return `false` beforehand if given key list is empty.
+
+```js
+const hasKey = (obj, keys) => {
+  return (
+    keys.length > 0 &&
+    keys.every(key => {
+      if (typeof obj !== 'object' || !obj.hasOwnProperty(key)) return false;
+      obj = obj[key];
+      return true;
+    })
+  );
+};
+```
+
+```js
+let obj = {
+  a: 1,
+  b: { c: 4 },
+  'b.d': 5
+};
+hasKey(obj, ['a']); // true
+hasKey(obj, ['b']); // true
+hasKey(obj, ['b', 'c']); // true
+hasKey(obj, ['b.d']); // true
+hasKey(obj, ['d']); // false
+hasKey(obj, ['c']); // false
+hasKey(obj, ['b', 'f']); // false
+```
+
+---
+title: hasMany
+---
+
+Checks if an array has more than one value matching the given function.
+
+- Use `Array.prototype.filter()` in combination with `fn` to find all matching array elements.
+- Use `Array.prototype.length` to check if more than one element match `fn`.
+
+```js
+const hasMany = (arr, fn) => arr.filter(fn).length > 1;
+```
+
+```js
+hasMany([1, 3], x => x % 2); // true
+hasMany([1, 2], x => x % 2); // false
+```
+
+---
+title: hasOne
+---
+
+Checks if an array has only one value matching the given function.
+
+- Use `Array.prototype.filter()` in combination with `fn` to find all matching array elements.
+- Use `Array.prototype.length` to check if only one element matches `fn`.
+
+```js
+const hasOne = (arr, fn) => arr.filter(fn).length === 1;
+```
+
+```js
+hasOne([1, 2], x => x % 2); // true
+hasOne([1, 3], x => x % 2); // false
+```
+
+---
+title: hashBrowser
+---
+
+Creates a hash for a value using the [SHA-256](https://en.wikipedia.org/wiki/SHA-2) algorithm.
+Returns a promise.
+
+- Use the [SubtleCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) API to create a hash for the given value.
+- Create a new `TextEncoder` and use it to encode `val`. Pass its value to `SubtleCrypto.digest()` to generate a digest of the given data.
+- Use `DataView.prototype.getUint32()` to read data from the resolved `ArrayBuffer`.
+- Convert the data to it hexadecimal representation using `Number.prototype.toString(16)`. Add the data to an array using `Array.prototype.push()`.
+- Finally, use `Array.prototype.join()` to combine values in the array of `hexes` into a string.
+
+```js
+const hashBrowser = val =>
+  crypto.subtle
+    .digest('SHA-256', new TextEncoder('utf-8').encode(val))
+    .then(h => {
+      let hexes = [],
+        view = new DataView(h);
+      for (let i = 0; i < view.byteLength; i += 4)
+        hexes.push(('00000000' + view.getUint32(i).toString(16)).slice(-8));
+      return hexes.join('');
+    });
+```
+
+```js
+hashBrowser(
+  JSON.stringify({ a: 'a', b: [1, 2, 3, 4], foo: { c: 'bar' } })
+).then(console.log);
+// '04aa106279f5977f59f9067fa9712afc4aedc6f5862a8defc34552d8c7206393'
+```
+
+---
+title: hashNode
+---
+
+Creates a hash for a value using the [SHA-256](https://en.wikipedia.org/wiki/SHA-2) algorithm.
+Returns a promise.
+
+- Use `crypto.createHash()` to create a `Hash` object with the appropriate algorithm.
+- Use `hash.update()` to add the data from `val` to the `Hash`, `hash.digest()` to calculate the digest of the data.
+- Use `setTimeout()` to prevent blocking on a long operation. Return a `Promise` to give it a familiar interface.
+
+```js
+const crypto = require('crypto');
+
+const hashNode = val =>
+  new Promise(resolve =>
+    setTimeout(
+      () => resolve(crypto.createHash('sha256').update(val).digest('hex')),
+      0
+    )
+  );
+```
+
+```js
+hashNode(JSON.stringify({ a: 'a', b: [1, 2, 3, 4], foo: { c: 'bar' } })).then(
+  console.log
+);
+// '04aa106279f5977f59f9067fa9712afc4aedc6f5862a8defc34552d8c7206393'
+```
+
+---
+title: haveSameContents
+---
+
+Checks if two arrays contain the same elements regardless of order.
+
+- Use a `for...of` loop over a `Set` created from the values of both arrays.
+- Use `Array.prototype.filter()` to compare the amount of occurrences of each distinct value in both arrays.
+- Return `false` if the counts do not match for any element, `true` otherwise.
+
+```js
+const haveSameContents = (a, b) => {
+  for (const v of new Set([...a, ...b]))
+    if (a.filter(e => e === v).length !== b.filter(e => e === v).length)
+      return false;
+  return true;
+};
+```
+
+```js
+haveSameContents([1, 2, 4], [2, 4, 1]); // true
+```
+
+---
+title: head
+---
+
+Returns the head of an array.
+
+- Check if `arr` is truthy and has a `length` property.
+- Use `arr[0]` if possible to return the first element, otherwise return `undefined`.
+
+```js
+const head = arr => (arr && arr.length ? arr[0] : undefined);
+```
+
+```js
+head([1, 2, 3]); // 1
+head([]); // undefined
+head(null); // undefined
+head(undefined); // undefined
+```
+
+---
+title: heapsort
+---
+
+Sorts an array of numbers, using the heapsort algorithm.
+
+- Use recursion.
+- Use the spread operator (`...`) to clone the original array, `arr`.
+- Use closures to declare a variable, `l`, and a function `heapify`.
+- Use a `for` loop and `Math.floor()` in combination with `heapify` to create a max heap from the array.
+- Use a `for` loop to repeatedly narrow down the considered range, using `heapify` and swapping values as necessary in order to sort the cloned array.
+
+```js
+const heapsort = arr => {
+  const a = [...arr];
+  let l = a.length;
+
+  const heapify = (a, i) => {
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+    let max = i;
+    if (left < l && a[left] > a[max]) max = left;
+    if (right < l && a[right] > a[max]) max = right;
+    if (max !== i) {
+      [a[max], a[i]] = [a[i], a[max]];
+      heapify(a, max);
+    }
+  };
+
+  for (let i = Math.floor(l / 2); i >= 0; i -= 1) heapify(a, i);
+  for (i = a.length - 1; i > 0; i--) {
+    [a[0], a[i]] = [a[i], a[0]];
+    l--;
+    heapify(a, 0);
+  }
+  return a;
+};
+```
+
+```js
+heapsort([6, 3, 4, 1]); // [1, 3, 4, 6]
+```
+
+---
+title: hexToRGB
+---
+
+Converts a color code to an `rgb()` or `rgba()` string if alpha value is provided.
+
+- Use bitwise right-shift operator and mask bits with `&` (and) operator to convert a hexadecimal color code (with or without prefixed with `#`) to a string with the RGB values.
+- If it's 3-digit color code, first convert to 6-digit version.
+- If an alpha value is provided alongside 6-digit hex, give `rgba()` string in return.
+
+```js
+const hexToRGB = hex => {
+  let alpha = false,
+    h = hex.slice(hex.startsWith('#') ? 1 : 0);
+  if (h.length === 3) h = [...h].map(x => x + x).join('');
+  else if (h.length === 8) alpha = true;
+  h = parseInt(h, 16);
+  return (
+    'rgb' +
+    (alpha ? 'a' : '') +
+    '(' +
+    (h >>> (alpha ? 24 : 16)) +
+    ', ' +
+    ((h & (alpha ? 0x00ff0000 : 0x00ff00)) >>> (alpha ? 16 : 8)) +
+    ', ' +
+    ((h & (alpha ? 0x0000ff00 : 0x0000ff)) >>> (alpha ? 8 : 0)) +
+    (alpha ? `, ${h & 0x000000ff}` : '') +
+    ')'
+  );
+};
+```
+
+```js
+hexToRGB('#27ae60ff'); // 'rgba(39, 174, 96, 255)'
+hexToRGB('27ae60'); // 'rgb(39, 174, 96)'
+hexToRGB('#fff'); // 'rgb(255, 255, 255)'
+```
+
+---
+title: hide
+---
+
+Hides all the elements specified.
+
+- Use the spread operator (`...`) and `Array.prototype.forEach()` to apply `display: none` to each element specified.
+
+```js
+const hide = (...el) => [...el].forEach(e => (e.style.display = 'none'));
+```
+
+```js
+hide(...document.querySelectorAll('img')); // Hides all <img> elements on the page
+```
+
+---
+title: httpDelete
+---
+
+Makes a `DELETE` request to the passed URL.
+
+- Use the `XMLHttpRequest` web API to make a `DELETE` request to the given `url`.
+- Handle the `onload` event, by running the provided `callback` function.
+- Handle the `onerror` event, by running the provided `err` function.
+- Omit the third argument, `err` to log the request to the console's error stream by default.
+
+```js
+const httpDelete = (url, callback, err = console.error) => {
+  const request = new XMLHttpRequest();
+  request.open('DELETE', url, true);
+  request.onload = () => callback(request);
+  request.onerror = () => err(request);
+  request.send();
+};
+```
+
+```js
+httpDelete('https://jsonplaceholder.typicode.com/posts/1', request => {
+  console.log(request.responseText);
+}); // Logs: {}
+```
+
+---
+title: httpGet
+---
+
+Makes a `GET` request to the passed URL.
+
+- Use the `XMLHttpRequest` web API to make a `GET` request to the given `url`.
+- Handle the `onload` event, by calling the given `callback` the `responseText`.
+- Handle the `onerror` event, by running the provided `err` function.
+- Omit the third argument, `err`, to log errors to the console's `error` stream by default.
+
+```js
+const httpGet = (url, callback, err = console.error) => {
+  const request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.onload = () => callback(request.responseText);
+  request.onerror = () => err(request);
+  request.send();
+};
+```
+
+```js
+httpGet(
+  'https://jsonplaceholder.typicode.com/posts/1',
+  console.log
+); /*
+Logs: {
+  "userId": 1,
+  "id": 1,
+  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+  "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+}
+*/
+```
+
+---
+title: httpPost
+---
+
+Makes a `POST` request to the passed URL.
+
+- Use the `XMLHttpRequest` web API to make a `POST` request to the given `url`.
+- Set the value of an `HTTP` request header with `setRequestHeader` method.
+- Handle the `onload` event, by calling the given `callback` the `responseText`.
+- Handle the `onerror` event, by running the provided `err` function.
+- Omit the fourth argument, `err`, to log errors to the console's `error` stream by default.
+
+```js
+const httpPost = (url, data, callback, err = console.error) => {
+  const request = new XMLHttpRequest();
+  request.open('POST', url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = () => callback(request.responseText);
+  request.onerror = () => err(request);
+  request.send(data);
+};
+```
+
+```js
+const newPost = {
+  userId: 1,
+  id: 1337,
+  title: 'Foo',
+  body: 'bar bar bar'
+};
+const data = JSON.stringify(newPost);
+httpPost(
+  'https://jsonplaceholder.typicode.com/posts',
+  data,
+  console.log
+); /*
+Logs: {
+  "userId": 1,
+  "id": 1337,
+  "title": "Foo",
+  "body": "bar bar bar"
+}
+*/
+httpPost(
+  'https://jsonplaceholder.typicode.com/posts',
+  null, // does not send a body
+  console.log
+); /*
+Logs: {
+  "id": 101
+}
+*/
+```
+
+---
+title: httpPut
+---
+
+Makes a `PUT` request to the passed URL.
+
+- Use `XMLHttpRequest` web api to make a `PUT` request to the given `url`.
+- Set the value of an `HTTP` request header with `setRequestHeader` method.
+- Handle the `onload` event, by running the provided `callback` function.
+- Handle the `onerror` event, by running the provided `err` function.
+- Omit the last argument, `err` to log the request to the console's error stream by default.
+
+```js
+const httpPut = (url, data, callback, err = console.error) => {
+  const request = new XMLHttpRequest();
+  request.open('PUT', url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = () => callback(request);
+  request.onerror = () => err(request);
+  request.send(data);
+};
+```
+
+```js
+const password = 'fooBaz';
+const data = JSON.stringify({
+  id: 1,
+  title: 'foo',
+  body: 'bar',
+  userId: 1
+});
+httpPut('https://jsonplaceholder.typicode.com/posts/1', data, request => {
+  console.log(request.responseText);
+}); /*
+Logs: {
+  id: 1,
+  title: 'foo',
+  body: 'bar',
+  userId: 1
+}
+*/
+```
+
+---
+title: httpsRedirect
+---
+
+Redirects the page to HTTPS if it's currently in HTTP.
+
+- Use `location.protocol` to get the protocol currently being used.
+- If it's not HTTPS, use `location.replace()` to replace the existing page with the HTTPS version of the page.
+- Use `location.href` to get the full address, split it with `String.prototype.split()` and remove the protocol part of the URL.
+- Note that pressing the back button doesn't take it back to the HTTP page as its replaced in the history.
+
+```js
+const httpsRedirect = () => {
+  if (location.protocol !== 'https:')
+    location.replace('https://' + location.href.split('//')[1]);
+};
+```
+
+```js
+httpsRedirect(); 
+// If you are on http://mydomain.com, you are redirected to https://mydomain.com
+```
+
+---
+title: hz
+unlisted: true
+---
+
+Measures the number of times a function is executed per second (`hz`/`hertz`).
+
+- Use `performance.now()` to get the difference in milliseconds before and after the iteration loop to calculate the time elapsed executing the function `iterations` times.
+- Return the number of cycles per second by converting milliseconds to seconds and dividing it by the time elapsed.
+- Omit the second argument, `iterations`, to use the default of 100 iterations.
+
+```js
+const hz = (fn, iterations = 100) => {
+  const before = performance.now();
+  for (let i = 0; i < iterations; i++) fn();
+  return (1000 * iterations) / (performance.now() - before);
+};
+```
+
+```js
+const numbers = Array(10000).fill().map((_, i) => i);
+
+const sumReduce = () => numbers.reduce((acc, n) => acc + n, 0);
+const sumForLoop = () => {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) sum += numbers[i];
+  return sum;
+};
+
+Math.round(hz(sumReduce)); // 572
+Math.round(hz(sumForLoop)); // 4784
+```
+
+---
+title: inRange
+---
+
+Checks if the given number falls within the given range.
+
+- Use arithmetic comparison to check if the given number is in the specified range.
+- If the second argument, `end`, is not specified, the range is considered to be from `0` to `start`.
+
+```js
+const inRange = (n, start, end = null) => {
+  if (end && start > end) [end, start] = [start, end];
+  return end == null ? n >= 0 && n < start : n >= start && n < end;
+};
+```
+
+```js
+inRange(3, 2, 5); // true
+inRange(3, 4); // true
+inRange(2, 3, 5); // false
+inRange(3, 2); // false
+```
+
+---
+title: includesAll
+---
+
+Checks if all the elements in `values` are included in `arr`.
+
+- Use `Array.prototype.every()` and `Array.prototype.includes()` to check if all elements of `values` are included in `arr`.
+
+```js
+const includesAll = (arr, values) => values.every(v => arr.includes(v));
+```
+
+```js
+includesAll([1, 2, 3, 4], [1, 4]); // true
+includesAll([1, 2, 3, 4], [1, 5]); // false
+```
+
+---
+title: includesAny
+---
+
+Checks if at least one element of `values` is included in `arr`.
+
+- Use `Array.prototype.some()` and `Array.prototype.includes()` to check if at least one element of `values` is included in `arr`.
+
+```js
+const includesAny = (arr, values) => values.some(v => arr.includes(v));
+```
+
+```js
+includesAny([1, 2, 3, 4], [2, 9]); // true
+includesAny([1, 2, 3, 4], [8, 9]); // false
+```
+
+---
+title: indentString
+---
+
+Indents each line in the provided string.
+
+- Use `String.prototype.replace()` and a regular expression to add the character specified by `indent` `count` times at the start of each line.
+- Omit the third argument, `indent`, to use a default indentation character of `' '`.
+
+```js
+const indentString = (str, count, indent = ' ') =>
+  str.replace(/^/gm, indent.repeat(count));
+```
+
+```js
+indentString('Lorem\nIpsum', 2); // '  Lorem\n  Ipsum'
+indentString('Lorem\nIpsum', 2, '_'); // '__Lorem\n__Ipsum'
+```
+
+---
+title: indexBy
+---
+
+Creates an object from an array, using a function to map each value to a key.
+
+- Use `Array.prototype.reduce()` to create an object from `arr`.
+- Apply `fn` to each value of `arr` to produce a key and add the key-value pair to the object.
+
+```js
+const indexBy = (arr, fn) =>
+  arr.reduce((obj, v, i) => {
+    obj[fn(v, i, arr)] = v;
+    return obj;
+  }, {});
+```
+
+```js
+indexBy([
+  { id: 10, name: 'apple' },
+  { id: 20, name: 'orange' }
+], x => x.id);
+// { '10': { id: 10, name: 'apple' }, '20': { id: 20, name: 'orange' } }
+```
