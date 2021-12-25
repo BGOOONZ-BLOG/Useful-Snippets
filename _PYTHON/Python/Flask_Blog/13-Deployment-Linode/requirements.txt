@@ -15,6 +15,6 @@ MarkupSafe==1.1.1
 Pillow==5.3.0
 pycparser==2.21
 six==1.16.0
-SQLAlchemy==1.4.28
+SQLAlchemy==1.4.29
 Werkzeug==0.14.1
 WTForms==2.1
