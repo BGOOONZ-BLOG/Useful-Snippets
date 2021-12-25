@@ -6,9 +6,7 @@ A collection of snippets that might come in handy, inspired by 30 seconds of cod
 
 ---
 title: CSVToArray
-tags: string,array,intermediate
-firstSeen: 2018-06-27T20:57:54+03:00
-lastUpdated: 2021-10-13T19:29:39+02:00
+
 ---
 
 Converts a comma-separated values (CSV) string to a 2D array.
@@ -73,9 +71,7 @@ CSVToJSON('col1;col2\na;b\nc;d', ';');
 
 ---
 title: HSBToRGB
-tags: math,intermediate
-firstSeen: 2020-09-18T14:25:07+03:00
-lastUpdated: 2020-09-18T14:25:07+03:00
+
 ---
 
 Converts a HSB color tuple to RGB format.
@@ -100,9 +96,7 @@ HSBToRGB(18, 81, 99); // [252.45, 109.31084999999996, 47.965499999999984]
 
 ---
 title: HSLToRGB
-tags: math,intermediate
-firstSeen: 2020-10-01T23:15:49+03:00
-lastUpdated: 2020-10-04T11:24:27+03:00
+
 ---
 
 Converts a HSL color tuple to RGB format.
@@ -152,9 +146,7 @@ JSONToFile({ test: 'is passed' }, 'testJsonFile');
 
 ---
 title: JSONtoCSV
-tags: array,string,object,advanced
-firstSeen: 2018-07-06T20:25:46+03:00
-lastUpdated: 2021-10-13T19:29:39+02:00
+
 ---
 
 Converts an array of objects to a comma-separated values (CSV) string that contains only the `columns` specified.
@@ -283,9 +275,7 @@ RGBToHex(255, 165, 1); // 'ffa501'
 
 ---
 title: URLJoin
-tags: string,regexp,advanced
-firstSeen: 2018-01-16T15:53:03+02:00
-lastUpdated: 2020-10-22T20:24:44+03:00
+
 ---
 
 Joins all given URL segments together, then normalizes the resulting URL.
@@ -338,9 +328,7 @@ UUIDGeneratorBrowser(); // '7982fcfe-5721-4632-bede-6000885be57d'
 
 ---
 title: UUIDGeneratorNode
-tags: node,random,intermediate
-firstSeen: 2017-12-29T09:47:10+02:00
-lastUpdated: 2020-10-22T20:24:44+03:00
+
 ---
 
 Generates a UUID in Node.JS.
