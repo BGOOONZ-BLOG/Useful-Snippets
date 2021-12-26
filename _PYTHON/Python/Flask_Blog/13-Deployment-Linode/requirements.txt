@@ -11,7 +11,7 @@ Flask-SQLAlchemy==2.5.1
 Flask-WTF==1.0.0
 itsdangerous==0.24
 Jinja2==3.0.3
-MarkupSafe==1.1.1
+MarkupSafe==2.0.1
 Pillow==5.4.1
 pycparser==2.21
 six==1.16.0
