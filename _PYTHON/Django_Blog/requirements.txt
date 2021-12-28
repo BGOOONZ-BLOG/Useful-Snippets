@@ -4,6 +4,6 @@ Django==4.0
 django-crispy-forms==1.7.2
 idna==2.10
 Pillow==5.4.1
-pytz==2018.5
+pytz==2021.3
 requests==2.26.0
 urllib3==1.26.7
