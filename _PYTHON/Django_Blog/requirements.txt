@@ -1,6 +1,6 @@
 certifi==2018.11.29
 chardet==3.0.4
-Django==4.0
+Django==4.0.4
 django-crispy-forms==1.7.2
 idna==3.3
 Pillow==5.4.1
