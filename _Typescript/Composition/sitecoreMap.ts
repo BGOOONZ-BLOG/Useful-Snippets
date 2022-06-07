@@ -1,0 +1,50 @@
+const sitecoreMap: { [key: string]: any } = {
+  '{16A1837D-2A3F-42F3-8C1A-B5B1046C5494}': 'ordered',
+  '{8A84C908-1CCA-4EEC-88F3-3C6C346834D8}': 'unordered',
+  '{FF21F39D-CBD0-46A9-A69A-62D332AD5181}': 'rectangular',
+  '{8E9B6D55-7D1F-4B21-9054-97BF50D879AC}': 'centered',
+  '{61F714DF-D053-4DF4-9E54-9020A5844A39}': 'bigicon',
+  '{E02CEEC1-46EF-4C79-8AAC-43831CFF2334}': 'white-bg',
+  '{CDA2EF8E-01AD-4912-BBFF-F376DA41AFA5}': 'shaded',
+  '{655042F5-509A-4132-B8FB-19BAEEC805BE}': 'shaded',
+  '{E41E751A-8ACD-4401-9E56-3921CF541D6A}': 'white-bg',
+  '{C7FCD5F7-A46D-4744-A9CF-44F17A8CEB1B}': {
+    name: 'single-centered-layout',
+    layoutCssClass: 'single-centered-layout',
+    row1CssClass: 'w-full',
+    row2CssClass: 'hidden',
+    row3CssClass: 'hidden',
+  },
+  '{CA2DFD05-B28D-4799-84E3-67162D1DAB30}': 'single-centered-layout',
+  '{51F624F8-3277-4415-B5F8-0355B2BD8593}': '50 50',
+  '{17A9308F-ED7E-4FA7-BA7B-19DCD78A62AF}': {
+    name: '50 50',
+    layoutCssClass: 'fiftyfifty-layout',
+    row1CssClass: 'md:pr-24 lg:pr-32 w-full md:w-1/2',
+    row2CssClass: 'md:pl-24 lg:pl-32 w-full md:w-1/2',
+    row3CssClass: 'hidden',
+  },
+  '{600D7B11-7472-44C3-ABA4-82B3CD320BC1}': {
+    name: 'Three Column',
+    layoutCssClass: 'three-col-layout',
+    row1CssClass: 'md:pr-24 lg:pr-32 w-full md:w-1/3',
+    row2CssClass: 'w-full md:w-1/3',
+    row3CssClass: 'md:pl-24 lg:pl-32 w-full md:w-1/3',
+  },
+  '{4AFE09E5-E921-4B82-AB83-97344BB8E6B5}': {
+    name: 'Left Sidebar',
+    layoutCssClass: 'left-sidebar-layout',
+    row1CssClass: 'md:pr-24 lg:pr-32 w-full md:w-1/4 lg:w-1/3',
+    row2CssClass: 'md:pl-24 lg:pl-32 w-full md:w-3/4 lg:w-2/3',
+    row3CssClass: 'hidden',
+  },
+  '{758EE747-ABC4-4DB6-83ED-C3A2BA757BD5}': {
+    name: 'Right Sidebar',
+    layoutCssClass: 'right-sidebar-layout',
+    row1CssClass: 'md:pr-24 lg:pr-32 w-full md:w-3/4 lg:w-2/3',
+    row2CssClass: 'md:pl-24 lg:pl-32 w-full md:w-1/4 lg:w-1/3',
+    row3CssClass: 'hidden',
+  },
+};
+
+export default sitecoreMap;
