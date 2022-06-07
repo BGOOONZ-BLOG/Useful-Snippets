@@ -5,7 +5,7 @@ interface State {
 }
 
 interface SetNextSlideAction {
-  type: 'setNextSlide';
+  type: "setNextSlide";
   payload: {
     moveSlide: number;
     slideData?: any;
@@ -13,7 +13,7 @@ interface SetNextSlideAction {
 }
 
 interface SetSlideIndexAction {
-  type: 'setSlideIndex';
+  type: "setSlideIndex";
   payload: {
     slideData?: any;
     slideIndex: number;
@@ -27,4 +27,9 @@ interface SlideContextType {
   state: State;
 }
 
-export type { SetNextSlideAction, SetSlideIndexAction, SlideContextType, State };
+export type {
+  SetNextSlideAction,
+  SetSlideIndexAction,
+  SlideContextType,
+  State,
+};

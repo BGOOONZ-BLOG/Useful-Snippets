@@ -1,24 +1,33 @@
-import loadable from '@loadable/component';
-import uid from 'uid';
-import { dataMap, inputMap, regexMap } from './mapping';
-import * as util from './utils/createForm';
-import { CFReturnType, GetDataProps, GetValidationProps, ParsedFormModel } from './types';
+import loadable from "@loadable/component";
+import uid from "uid";
+import { dataMap, inputMap, regexMap } from "./mapping";
+import * as util from "./utils/createForm";
+import {
+  CFReturnType,
+  GetDataProps,
+  GetValidationProps,
+  ParsedFormModel,
+} from "./types";
 
-const createForm = ({ fields, title }: Pick<ParsedFormModel, 'fields' | 'title'>) => {
+const createForm = ({
+  fields,
+  title,
+}: Pick<ParsedFormModel, "fields" | "title">) => {
   // normalize form field title for inputMap lookup
   // 'Drop List' => 'drop_list'
   const formattedTitle = util.toLowerSnakeCase(title);
 
   // Try to determine the field type by its JSS fields props or do a lookup
   // by the field name in the inputMap. Its not ideal but we have little options here
-  const inputType = determineFieldType(fields, title) || inputMap[formattedTitle];
+  const inputType =
+    determineFieldType(fields, title) || inputMap[formattedTitle];
 
   // fields we don't want to render will return a valid null value
   // from inputMap we want to return early for these fields.
   // The null values will later be filtered out of the returned array
   // 'undefined' values will be converted to 'input'
   if (inputType === null) return inputType;
-  const processedInput = !inputType ? 'input' : inputType;
+  const processedInput = !inputType ? "input" : inputType;
 
   // get the data/prop information for the input field,
   // the file name, icon, mask function etc.. and import it
@@ -55,19 +64,22 @@ const createFormInit: {
 };
 
 // Determine the field type based on its JSS 'fields' props
-const determineFieldType = (fields: ParsedFormModel['fields'], title: string) => {
+const determineFieldType = (
+  fields: ParsedFormModel["fields"],
+  title: string
+) => {
   if (fields?.Checked) {
-    return 'checkbox';
+    return "checkbox";
   }
 
-  if (fields?.InputItems?.type === 'textarea-split') {
-    return 'select';
+  if (fields?.InputItems?.type === "textarea-split") {
+    return "select";
   }
 
   // TODO: after the final content migration we'll need to go into Sitecore and update the
   // FormBuilder fields on the forms that have hidden fields to make sure they follow this format
-  if (fields?.Value?.value === 'hidden' && title === 'Text Input') {
-    return 'hidden';
+  if (fields?.Value?.value === "hidden" && title === "Text Input") {
+    return "hidden";
   }
 
   return null;
@@ -75,24 +87,25 @@ const determineFieldType = (fields: ParsedFormModel['fields'], title: string) =>
 
 // The data value that is returned from createForm
 const getData: GetDataProps = ({ fields, title }) => ({
-  customValidationErrorMsg: fields?.CustomValidationErrorMsg?.value || 'field is required',
+  customValidationErrorMsg:
+    fields?.CustomValidationErrorMsg?.value || "field is required",
   defaultValue: util.getCookieValue(fields),
   id: fields?.Id?.value,
   items: util.getItems(fields),
-  label: fields?.Label?.value || '',
+  label: fields?.Label?.value || "",
   maxLength: parseInt(fields?.MaximumLength?.value) || 524288,
   minLength: parseInt(fields?.MinimumLength?.value) || 0,
   name: util.getName(fields, title),
-  placeholder: fields?.PlaceholderText?.value || '',
+  placeholder: fields?.PlaceholderText?.value || "",
   required: fields?.Required?.value,
-  tabs: fields?.Tabs?.value.split('\n') || [],
+  tabs: fields?.Tabs?.value.split("\n") || [],
   title,
   toolTipText: fields?.TooltipText?.value,
 });
 
 // determine the validations (if any) for this input field
-const getValidations: GetValidationProps = (file, fields, regex = '') => {
-  const skipValidation = ['Heading', 'Recaptcha', 'Tabs'];
+const getValidations: GetValidationProps = (file, fields, regex = "") => {
+  const skipValidation = ["Heading", "Recaptcha", "Tabs"];
   let pattern;
 
   if (file && skipValidation.includes(file)) return null;
@@ -100,7 +113,7 @@ const getValidations: GetValidationProps = (file, fields, regex = '') => {
   // Validations will usually come through as a string value from sitecore
   // but can also come through as an array of objects, these have the type 'select'
   // We first need to parse through this array and grab the value of the selected validation pattern
-  if (fields?.ValidationPattern?.type === 'select') {
+  if (fields?.ValidationPattern?.type === "select") {
     pattern = util.getSelectedValue(fields.ValidationPattern.value);
   } else {
     pattern = fields?.ValidationPattern?.value;
@@ -125,10 +138,10 @@ const multiStepFormFields = (arr: Array<ParsedFormModel>) => {
   // 'Start' types mark the first chunk of the array. This function eventually returns:
   // [[form stepper element], [...first section fields], [...second section fields] ...etc]
   parsedArr.map((elm: CFReturnType) => {
-    if (elm.file === 'End') {
+    if (elm.file === "End") {
       outerArr.push(innerArr);
       innerArr = [];
-    } else if (elm.file === 'Start') {
+    } else if (elm.file === "Start") {
       innerArr.push(elm);
       outerArr.push(innerArr);
       innerArr = [];

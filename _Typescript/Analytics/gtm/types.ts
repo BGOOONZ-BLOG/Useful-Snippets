@@ -1,4 +1,4 @@
-import { YouTubePlayer } from 'youtube-player/dist/types';
+import { YouTubePlayer } from "youtube-player/dist/types";
 
 type ComponentEvent = {
   action?: string;
@@ -21,7 +21,7 @@ type FormEvent = {
 };
 
 type NavEvent = {
-  event?: 'send-page';
+  event?: "send-page";
   page: string;
   jurisdiction?: string;
   segment?: string;
@@ -30,7 +30,7 @@ type NavEvent = {
 type VideoEvent = {
   id: string;
   target: YouTubePlayer;
-  videoType?: 'multi' | 'modal';
+  videoType?: "multi" | "modal";
   page?: string;
 };
 

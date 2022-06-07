@@ -4,7 +4,9 @@ type ValueOf<T> = T[keyof T];
 // that is needed for makeKey().
 
 type ObserverOptions = {
-  [key in keyof IntersectionObserverInit | string]: ValueOf<IntersectionObserverInit>;
+  [key in
+    | keyof IntersectionObserverInit
+    | string]: ValueOf<IntersectionObserverInit>;
 };
 
 export type { ObserverOptions };

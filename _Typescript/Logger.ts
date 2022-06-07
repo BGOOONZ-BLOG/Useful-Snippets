@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import appInsights from 'src/lib/AppInsights';
-import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import appInsights from "src/lib/AppInsights";
+import { SeverityLevel } from "@microsoft/applicationinsights-web";
 
 const Logger = (
   error: Error | string | unknown,
   options?: { message?: string; errorId?: string; componentName?: string }
 ) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return console.error(error);
   }
 
@@ -20,9 +20,9 @@ const Logger = (
       // if it's something else, create a generic Error('error')
       error instanceof Error
         ? error
-        : typeof error === 'string'
+        : typeof error === "string"
         ? new Error(error)
-        : new Error('error'),
+        : new Error("error"),
     severityLevel: SeverityLevel.Error,
     properties: {
       componentName: options?.componentName,

@@ -5,11 +5,12 @@ import React, {
   forwardRef,
   useRef,
   useImperativeHandle,
-} from 'react';
-import Logger from 'src/lib/Logger';
-import { UseFocusTrap, FocusTrapType } from './types';
+} from "react";
+import Logger from "src/lib/Logger";
+import { UseFocusTrap, FocusTrapType } from "./types";
 
-const isHTMLElement = (el: unknown): el is HTMLElement => el instanceof HTMLElement;
+const isHTMLElement = (el: unknown): el is HTMLElement =>
+  el instanceof HTMLElement;
 
 const getChildNodes = (container: HTMLElement | null) => {
   if (!isHTMLElement(container)) {
@@ -20,13 +21,21 @@ const getChildNodes = (container: HTMLElement | null) => {
   const focusableTags =
     '[href], button, textarea, input, select, details, iframe, [tabindex]:not([tabindex="-1"]';
   // get a list of child nodes in the trap container's content
-  const childNodes = Array.from(container.querySelectorAll(focusableTags)).filter(
-    node => !node.getAttribute('aria-hidden') && !node.hasAttribute('disabled')
+  const childNodes = Array.from(
+    container.querySelectorAll(focusableTags)
+  ).filter(
+    (node) =>
+      !node.getAttribute("aria-hidden") && !node.hasAttribute("disabled")
   );
   return childNodes as HTMLElement[];
 };
 
-const useFocusTrap = ({ container, onExit, onEnter, shouldTrap }: UseFocusTrap) => {
+const useFocusTrap = ({
+  container,
+  onExit,
+  onEnter,
+  shouldTrap,
+}: UseFocusTrap) => {
   const previouslyFocusedElement = React.useRef<HTMLElement | null>(null);
 
   const handleExit = () => {
@@ -86,9 +95,9 @@ const useFocusTrap = ({ container, onExit, onEnter, shouldTrap }: UseFocusTrap) 
 
     const handleKeydown = (event: KeyboardEvent) => {
       switch (event.key) {
-        case 'Tab':
+        case "Tab":
           return handleTab(event);
-        case 'Escape':
+        case "Escape":
           return handleExit();
         default:
           return event;
@@ -100,28 +109,36 @@ const useFocusTrap = ({ container, onExit, onEnter, shouldTrap }: UseFocusTrap) 
         onEnter(getChildNodes(container));
       }
 
-      document.addEventListener('keydown', handleKeydown);
+      document.addEventListener("keydown", handleKeydown);
     }
 
     return () => {
       previouslyFocusedElement.current?.focus();
 
-      document.removeEventListener('keydown', handleKeydown);
+      document.removeEventListener("keydown", handleKeydown);
     };
   }, [shouldTrap]);
 };
 
-const FocusTrapComponent: FocusTrapType = ({ onEnter, onExit, shouldTrap, ...props }, ref) => {
+const FocusTrapComponent: FocusTrapType = (
+  { onEnter, onExit, shouldTrap, ...props },
+  ref
+) => {
   const [isReady, setIsReady] = useState(false);
   const container = useRef<HTMLDivElement | null>(null);
   // assign forwarded ref to container.current
   useImperativeHandle(ref, () => container.current!, [ref]);
   const shouldTrapAndIsReady = shouldTrap && isReady;
-  useFocusTrap({ shouldTrap: shouldTrapAndIsReady, container: container.current, onEnter, onExit });
+  useFocusTrap({
+    shouldTrap: shouldTrapAndIsReady,
+    container: container.current,
+    onEnter,
+    onExit,
+  });
 
   return (
     <div
-      ref={element => {
+      ref={(element) => {
         container.current = element;
         setIsReady(true);
       }}

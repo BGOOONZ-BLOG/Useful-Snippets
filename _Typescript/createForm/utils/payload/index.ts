@@ -1,9 +1,9 @@
-import { onlyUniqueWords, toPascalCase } from 'src/lib/helpers';
-import { isLiteralObject } from '../forms';
-import { BuildPayloadFieldsType, GetPayloadFieldsTypes } from './types';
+import { onlyUniqueWords, toPascalCase } from "src/lib/helpers";
+import { isLiteralObject } from "../forms";
+import { BuildPayloadFieldsType, GetPayloadFieldsTypes } from "./types";
 
 const buildPayloadFields: BuildPayloadFieldsType = (state, data, condition) => {
-  let selectedForm = { id: '', form: '', value: '' };
+  let selectedForm = { id: "", form: "", value: "" };
   const disclosed = state.fields.reduce((acc, { id, form, label, name }) => {
     if (form.id === condition) {
       selectedForm = form;
@@ -21,22 +21,26 @@ const getPayloadFields: GetPayloadFieldsTypes = (data, progressiveState) => {
   const progressiveFieldsPayloadArr: Array<any> = [];
   const progressiveFieldsToExcludeFromPayload = onlyUniqueWords(
     Object.values(progressiveState)
-      .map(elm => elm.fields)
+      .map((elm) => elm.fields)
       .flat()
-      .map(elm => elm.id)
-      .join(' ')
-  ).split(' ');
+      .map((elm) => elm.id)
+      .join(" ")
+  ).split(" ");
 
   // all fields in the incoming data payload
-  Object.keys(data).forEach(dataField => {
+  Object.keys(data).forEach((dataField) => {
     const stateField = progressiveState[dataField];
 
     // if current field is a progressive field
     if (stateField && data[dataField]) {
       switch (stateField.type) {
-        case 'radio': {
+        case "radio": {
           const optionSelected = data[dataField].text;
-          const { disclosed, form } = buildPayloadFields(stateField, data, optionSelected);
+          const { disclosed, form } = buildPayloadFields(
+            stateField,
+            data,
+            optionSelected
+          );
 
           return progressiveFieldsPayloadArr.push({
             [dataField]: {
@@ -45,12 +49,16 @@ const getPayloadFields: GetPayloadFieldsTypes = (data, progressiveState) => {
             },
           });
         }
-        case 'checkbox': {
+        case "checkbox": {
           const checkboxFieldsArr: Array<any> = [];
           const optionSelected = Object.keys(data[dataField]);
 
-          optionSelected.forEach(elm => {
-            const { disclosed, form } = buildPayloadFields(stateField, data, elm);
+          optionSelected.forEach((elm) => {
+            const { disclosed, form } = buildPayloadFields(
+              stateField,
+              data,
+              elm
+            );
 
             checkboxFieldsArr.push({
               [toPascalCase(elm)]: [
@@ -82,8 +90,10 @@ const getPayloadFields: GetPayloadFieldsTypes = (data, progressiveState) => {
 
   // remove 'normal' fields that are already 'disclosed' in the progressive fields and set the data
   return progressiveFieldsPayloadArr
-    .filter(elm => elm && !progressiveFieldsToExcludeFromPayload.includes(elm))
-    .map(elm => {
+    .filter(
+      (elm) => elm && !progressiveFieldsToExcludeFromPayload.includes(elm)
+    )
+    .map((elm) => {
       if (isLiteralObject(elm)) {
         return elm;
       } else {

@@ -34,7 +34,7 @@ function getJson(e) {
       console.log(data);
       let output = "";
 
-      data.map(({title}) => {
+      data.map(({ title }) => {
         output += `<li>${title}</li>`;
       });
       display.innerHTML = output;
@@ -58,7 +58,7 @@ function getExt(e) {
       console.log(data);
       let output = "";
 
-      data.map(({login, avatar_url}) => {
+      data.map(({ login, avatar_url }) => {
         output += `
       <li>${login}</li>
       <img src="${avatar_url}" alt="">

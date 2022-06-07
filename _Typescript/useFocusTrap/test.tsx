@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
-import { screen, render } from 'src/lib/testWrappers';
-import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
-import { useFocusTrap, FocusTrap } from './index';
+import { useRef, useState } from "react";
+import { screen, render } from "src/lib/testWrappers";
+import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
+import { useFocusTrap, FocusTrap } from "./index";
 
 const TestComponent = () => {
   const panel = useRef<HTMLDivElement>(null);
@@ -32,36 +32,36 @@ const TestComponent = () => {
   );
 };
 
-describe('useFocusTrap', () => {
-  it('traps the focus within the container when pressing tab', async () => {
+describe("useFocusTrap", () => {
+  it("traps the focus within the container when pressing tab", async () => {
     const user = userEvent.setup();
     render(<TestComponent />);
 
     // open dialog
-    let trigger = await screen.findByRole('button', { name: /toggle/i });
+    let trigger = await screen.findByRole("button", { name: /toggle/i });
     trigger.focus();
     expect(trigger).toHaveFocus();
     await user.click(trigger);
 
     // dialog displays and has focus
     const dialogContent = screen.queryByText(/link/i);
-    const dialog = await screen.findByRole('dialog');
+    const dialog = await screen.findByRole("dialog");
     expect(dialogContent).toBeInTheDocument();
     expect(dialog).toHaveFocus();
 
     // tab moves focus to next element
-    const button = await screen.findByRole('button', { name: /button/i });
+    const button = await screen.findByRole("button", { name: /button/i });
     await user.tab();
     expect(button).toHaveFocus();
 
     // tab moves focus to next element
     await user.tab();
-    const textbox = await screen.findByRole('textbox', { name: /input/i });
+    const textbox = await screen.findByRole("textbox", { name: /input/i });
     expect(textbox).toHaveFocus();
 
     // tab moves focus to next element
     await user.tab();
-    const link = await screen.findByRole('link', { name: /link/i });
+    const link = await screen.findByRole("link", { name: /link/i });
     expect(link).toHaveFocus();
 
     // we have tabbed through all elements, so now focus should cycle back to the first element
@@ -69,37 +69,37 @@ describe('useFocusTrap', () => {
     expect(button).toHaveFocus();
 
     // it closes and returns focus to originally focused element
-    await user.keyboard('{Escape}');
-    trigger = await screen.findByRole('button', { name: /toggle/i });
+    await user.keyboard("{Escape}");
+    trigger = await screen.findByRole("button", { name: /toggle/i });
 
     expect(dialogContent).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
   });
 
-  it('traps the focus within the container when pressing shift+tab', async () => {
+  it("traps the focus within the container when pressing shift+tab", async () => {
     const user = userEvent.setup();
     render(<TestComponent />);
 
     // open dialog
-    const trigger = await screen.findByRole('button', { name: /toggle/i });
+    const trigger = await screen.findByRole("button", { name: /toggle/i });
     trigger.focus();
     expect(trigger).toHaveFocus();
     await user.click(trigger);
 
     // dialog displays and has focus
     const dialogContent = screen.queryByText(/link/i);
-    const dialog = await screen.findByRole('dialog');
+    const dialog = await screen.findByRole("dialog");
     expect(dialogContent).toBeInTheDocument();
     expect(dialog).toHaveFocus();
 
     // moves backwards
-    const link = await screen.findByRole('link', { name: /link/i });
+    const link = await screen.findByRole("link", { name: /link/i });
     await user.tab({ shift: true });
     expect(link).toHaveFocus();
 
     // moves back again
     await user.tab({ shift: true });
-    const textbox = await screen.findByRole('textbox', { name: /input/i });
+    const textbox = await screen.findByRole("textbox", { name: /input/i });
     expect(textbox).toHaveFocus();
   });
 });
@@ -109,7 +109,7 @@ export const FocusTrapTest = () => {
 
   return (
     <div>
-      <button onClick={() => setIsThere(v => !v)}>toggle</button>
+      <button onClick={() => setIsThere((v) => !v)}>toggle</button>
       {/**
        * The main functionality of the FocusTrap component is to wrap over the useFocusTrap hook
        * and handle situations like this where the focus trap container ref is attached to a conditionally rendered element.
@@ -135,7 +135,7 @@ export const FocusTrapTestForwardRef = () => {
 
   return (
     <div>
-      <button onClick={() => setIsThere(v => !v)}>toggle</button>
+      <button onClick={() => setIsThere((v) => !v)}>toggle</button>
       {isThere && (
         <FocusTrap
           shouldTrap={isThere}
@@ -153,29 +153,29 @@ export const FocusTrapTestForwardRef = () => {
   );
 };
 
-describe('FocusTrap', () => {
-  it('focuses AFTER the ref has been successfully attached', async () => {
+describe("FocusTrap", () => {
+  it("focuses AFTER the ref has been successfully attached", async () => {
     render(<FocusTrapTest />);
 
-    let trigger = await screen.findByRole('button', { name: /toggle/i });
+    let trigger = await screen.findByRole("button", { name: /toggle/i });
 
     trigger.focus();
     expect(trigger).toHaveFocus();
     // open trap
     await userEvent.click(trigger);
     // first item has focus
-    expect(await screen.findByRole('button', { name: /1/i })).toHaveFocus();
+    expect(await screen.findByRole("button", { name: /1/i })).toHaveFocus();
     // close trap
-    await userEvent.keyboard('{Escape}');
+    await userEvent.keyboard("{Escape}");
     // focus is returned to trigger
-    trigger = await screen.findByRole('button', { name: /toggle/i });
+    trigger = await screen.findByRole("button", { name: /toggle/i });
     expect(trigger).toHaveFocus();
   });
 
-  it('forwards a ref', async () => {
+  it("forwards a ref", async () => {
     render(<FocusTrapTestForwardRef />);
 
-    let trigger = await screen.findByRole('button', { name: /toggle/i });
+    let trigger = await screen.findByRole("button", { name: /toggle/i });
 
     trigger.focus();
 
@@ -183,15 +183,15 @@ describe('FocusTrap', () => {
     // open trap
     await userEvent.click(trigger);
     // focus first on dialog which is forwardedRef
-    expect(await screen.getByRole('dialog')).toHaveFocus();
+    expect(await screen.getByRole("dialog")).toHaveFocus();
     // go to next item
     await userEvent.tab();
     // first item has focus
-    expect(await screen.findByRole('button', { name: /1/i })).toHaveFocus();
+    expect(await screen.findByRole("button", { name: /1/i })).toHaveFocus();
     // close trap
-    await userEvent.keyboard('{Escape}');
+    await userEvent.keyboard("{Escape}");
     // focus is returned to trigger
-    trigger = await screen.findByRole('button', { name: /toggle/i });
+    trigger = await screen.findByRole("button", { name: /toggle/i });
     expect(trigger).toHaveFocus();
   });
 });

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 interface useDebounceType {
   (callback: () => void, delay: number): () => void;
@@ -26,7 +26,7 @@ const useDebounce: useDebounceType = (callback, delay) => {
     return () => clearTimeout(id);
   }, [callCount, delay]);
 
-  return () => setCallCount(callCount => callCount + 1);
+  return () => setCallCount((callCount) => callCount + 1);
 };
 
 export { useDebounce };

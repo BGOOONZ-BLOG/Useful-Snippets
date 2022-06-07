@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useMemo } from "react";
+import { useHistory } from "react-router-dom";
 
 const useQueryParam = (param: string) => {
   const history = useHistory();

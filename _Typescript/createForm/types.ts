@@ -1,4 +1,4 @@
-import { PostFormDataType } from 'src/api/duke/forms';
+import { PostFormDataType } from "src/api/duke/forms";
 
 interface CFDataType {
   customValidationErrorMsg: string;
@@ -19,8 +19,8 @@ interface CFDataType {
 interface CFMappingType {
   dataMap: {
     [key: string]: {
-      file: CFReturnType['file'];
-      props?: CFReturnType['props'];
+      file: CFReturnType["file"];
+      props?: CFReturnType["props"];
     };
   };
   inputMap: { [key: string]: string | null };
@@ -55,7 +55,7 @@ interface CFValidationsType {
 }
 
 interface CreateFormProps {
-  ({ fields, title }: Pick<ParsedFormModel, 'fields' | 'title'>): CFReturnType;
+  ({ fields, title }: Pick<ParsedFormModel, "fields" | "title">): CFReturnType;
 }
 
 interface FormConfirmationData {
@@ -82,14 +82,14 @@ interface FormFieldsType {
 
 interface GetValidationProps {
   (
-    file: CFReturnType['file'],
-    fields: ParsedFormModel['fields'],
-    regex?: CFPropsType['regex']
-  ): CFReturnType['validations'];
+    file: CFReturnType["file"],
+    fields: ParsedFormModel["fields"],
+    regex?: CFPropsType["regex"]
+  ): CFReturnType["validations"];
 }
 
 interface GetDataProps {
-  ({ fields, title }: Pick<ParsedFormModel, 'fields' | 'title'>): CFDataType;
+  ({ fields, title }: Pick<ParsedFormModel, "fields" | "title">): CFDataType;
 }
 
 interface ParsedFormModelFields {

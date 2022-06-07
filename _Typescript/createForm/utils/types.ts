@@ -1,4 +1,4 @@
-import { PFState } from 'src/components/Form/Progressive/context/types';
+import { PFState } from "src/components/Form/Progressive/context/types";
 
 interface BuildPayload {
   data: any;

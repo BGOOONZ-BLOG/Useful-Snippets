@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { ObserverOptions } from './types';
+import { useEffect, useState, useRef } from "react";
+import { ObserverOptions } from "./types";
 
 // Simplified version of this idea, sharing IntersectionObserver instance
 // https://github.com/thebuilder/react-intersection-observer/blob/master/src/observers.ts
@@ -28,8 +28,8 @@ const createObserver = (opts: ObserverOptions) => {
   // If the observer instance doesn't exist create one
   if (!instance) {
     const elements = new Map<Element, Function>();
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
         // Appy callback with entry passed thru as arg
         elements.get(entry.target)?.(entry);
       });

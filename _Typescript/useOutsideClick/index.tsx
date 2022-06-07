@@ -1,6 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-const useOutsideClick = (element: HTMLElement | null, callback: (e: MouseEvent) => void) => {
+const useOutsideClick = (
+  element: HTMLElement | null,
+  callback: (e: MouseEvent) => void
+) => {
   const handler = useRef(callback);
 
   useEffect(() => {
@@ -9,15 +12,18 @@ const useOutsideClick = (element: HTMLElement | null, callback: (e: MouseEvent) 
 
   useEffect(() => {
     const handleEvent = (event: MouseEvent) => {
-      if (event.target instanceof HTMLElement && !event.target.contains(element)) {
+      if (
+        event.target instanceof HTMLElement &&
+        !event.target.contains(element)
+      ) {
         handler.current(event);
       }
     };
 
-    window.addEventListener('click', handleEvent);
+    window.addEventListener("click", handleEvent);
 
     return () => {
-      window.removeEventListener('click', handleEvent);
+      window.removeEventListener("click", handleEvent);
     };
   }, []);
 };

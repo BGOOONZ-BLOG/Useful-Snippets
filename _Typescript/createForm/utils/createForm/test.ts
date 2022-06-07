@@ -1,81 +1,81 @@
-import { getCookieValue, getDatePickerData, getSelectedValue } from './index';
-import { jsonData as datePickerData } from 'src/components/Form/DatePicker/data';
+import { getCookieValue, getDatePickerData, getSelectedValue } from "./index";
+import { jsonData as datePickerData } from "src/components/Form/DatePicker/data";
 
-describe('createForm Utils', () => {
-  describe('getCookieValue', () => {
-    Object.defineProperty(global.document, 'cookie', {
-      value: 'invitationcode=thisisthecode; other=hello; other2=world;',
+describe("createForm Utils", () => {
+  describe("getCookieValue", () => {
+    Object.defineProperty(global.document, "cookie", {
+      value: "invitationcode=thisisthecode; other=hello; other2=world;",
     });
 
-    it('returns the cookie value if called for in DefaultValueSource', () => {
+    it("returns the cookie value if called for in DefaultValueSource", () => {
       const assert1 = getCookieValue({
-        DefaultValueKey: { value: 'invitationcode' },
+        DefaultValueKey: { value: "invitationcode" },
         DefaultValueSource: {
           value: [
-            { value: 'None', selected: false },
-            { value: 'cookie', selected: true },
+            { value: "None", selected: false },
+            { value: "cookie", selected: true },
           ],
         },
       });
       const assert2 = getCookieValue({
-        DefaultValueKey: { value: 'other' },
+        DefaultValueKey: { value: "other" },
         DefaultValueSource: {
           value: [
-            { value: 'None', selected: false },
-            { value: 'cookie', selected: true },
+            { value: "None", selected: false },
+            { value: "cookie", selected: true },
           ],
         },
       });
 
-      expect(assert1).toBe('thisisthecode');
-      expect(assert2).toBe('hello');
+      expect(assert1).toBe("thisisthecode");
+      expect(assert2).toBe("hello");
     });
 
-    it('returns an empty string if there is no DefaultValueSource', () => {
+    it("returns an empty string if there is no DefaultValueSource", () => {
       const assert1 = getCookieValue({
-        DefaultValueKey: { value: 'invitationcode' },
+        DefaultValueKey: { value: "invitationcode" },
         DefaultValueSource: {},
       });
       const assert2 = getCookieValue({
-        DefaultValueKey: { value: 'other' },
+        DefaultValueKey: { value: "other" },
         DefaultValueSource: {},
       });
 
-      expect(assert1).toBe('');
-      expect(assert2).toBe('');
+      expect(assert1).toBe("");
+      expect(assert2).toBe("");
     });
 
-    it('returns an empty string if the cookie doesnt exist', () => {
+    it("returns an empty string if the cookie doesnt exist", () => {
       const assert1 = getCookieValue({
-        DefaultValueKey: { value: 'nope' },
+        DefaultValueKey: { value: "nope" },
         DefaultValueSource: {
           value: [
-            { value: 'None', selected: false },
-            { value: 'cookie', selected: true },
+            { value: "None", selected: false },
+            { value: "cookie", selected: true },
           ],
         },
       });
       const assert2 = getCookieValue({
-        DefaultValueKey: { value: 'tryagain' },
+        DefaultValueKey: { value: "tryagain" },
         DefaultValueSource: {
           value: [
-            { value: 'None', selected: false },
-            { value: 'cookie', selected: true },
+            { value: "None", selected: false },
+            { value: "cookie", selected: true },
           ],
         },
       });
 
-      expect(assert1).toBe('');
-      expect(assert2).toBe('');
+      expect(assert1).toBe("");
+      expect(assert2).toBe("");
     });
   });
 
-  describe('getDatePickerData', () => {
-    it('returns the expected options from the raw fields json', () => {
+  describe("getDatePickerData", () => {
+    it("returns the expected options from the raw fields json", () => {
       const assert = getDatePickerData(datePickerData);
       const expected = [
         {
-          blackoutDates: ['09/19/2021'],
+          blackoutDates: ["09/19/2021"],
           dateRange: null,
           disableSundays: false,
           disableWeekends: false,
@@ -88,38 +88,38 @@ describe('createForm Utils', () => {
     });
   });
 
-  describe('getSelectedValue', () => {
-    it('gets the sitecore form field column width and returns the object value that has a true selection', () => {
+  describe("getSelectedValue", () => {
+    it("gets the sitecore form field column width and returns the object value that has a true selection", () => {
       const colDataFromSitecore = [
         {
-          value: '2',
+          value: "2",
           selected: false,
-          label: '2',
+          label: "2",
         },
         {
-          value: '3',
+          value: "3",
           selected: true,
-          label: '3',
+          label: "3",
         },
         {
-          value: '4',
+          value: "4",
           selected: false,
-          label: '4',
+          label: "4",
         },
         {
-          value: '5',
+          value: "5",
           selected: false,
-          label: '5',
+          label: "5",
         },
         {
-          value: '6',
+          value: "6",
           selected: false,
-          label: '6',
+          label: "6",
         },
       ];
 
       const assert = getSelectedValue(colDataFromSitecore);
-      expect(assert).toEqual('3');
+      expect(assert).toEqual("3");
     });
   });
 });

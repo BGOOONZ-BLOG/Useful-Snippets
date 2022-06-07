@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { assertElement } from 'src/lib/helpers/assert';
+import React, { useEffect, useState } from "react";
+import { assertElement } from "src/lib/helpers/assert";
 
 const ObserverMap = new Map<
   string,
@@ -10,26 +10,26 @@ const ObserverMap = new Map<
 >();
 
 const createObserver = () => {
-  let instance = ObserverMap.get('observer');
+  let instance = ObserverMap.get("observer");
 
   // If the observer instance doesn't exist create one
   if (!instance) {
     const elements = new Map<Element, Function>();
     const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         // Appy callback with entry passed thru as arg
         elements.get(entry.target)?.(entry);
       });
     });
     instance = { observer, elements };
-    ObserverMap.set('observer', instance);
+    ObserverMap.set("observer", instance);
   }
 
   return instance;
 };
 
 const observer = () => {
-  if (typeof ResizeObserver === 'undefined') {
+  if (typeof ResizeObserver === "undefined") {
     return { observe: () => {}, disconnect: () => {} };
   }
 

@@ -1,6 +1,11 @@
-import React, { createContext, useContext, useReducer } from 'react';
-import Transition from 'src/lib/Transition';
-import { SetNextSlideAction, SetSlideIndexAction, SlideContextType, State } from './types';
+import React, { createContext, useContext, useReducer } from "react";
+import Transition from "src/lib/Transition";
+import {
+  SetNextSlideAction,
+  SetSlideIndexAction,
+  SlideContextType,
+  State,
+} from "./types";
 
 const initialState = {
   activeSlide: 0,
@@ -13,24 +18,30 @@ const SlideContext = createContext<SlideContextType>({
   state: initialState,
 });
 
-const SlideReducer = (state: State, action: SetNextSlideAction | SetSlideIndexAction) => {
-  const automaticDirection = (slideIndex: number) => (slideIndex > state.activeSlide ? 100 : -100);
+const SlideReducer = (
+  state: State,
+  action: SetNextSlideAction | SetSlideIndexAction
+) => {
+  const automaticDirection = (slideIndex: number) =>
+    slideIndex > state.activeSlide ? 100 : -100;
 
   switch (action.type) {
-    case 'setNextSlide':
+    case "setNextSlide":
       return {
         ...state,
         activeSlide: state.activeSlide + action.payload.moveSlide,
         slideData: action.payload.slideData,
-        slideDirection: automaticDirection(state.activeSlide + action.payload.moveSlide),
+        slideDirection: automaticDirection(
+          state.activeSlide + action.payload.moveSlide
+        ),
       };
-    case 'setSlideIndex':
+    case "setSlideIndex":
       return {
         ...state,
         activeSlide: action.payload.slideIndex,
         slideData: action.payload.slideData,
         slideDirection:
-          typeof action.payload.slideDirection !== 'undefined'
+          typeof action.payload.slideDirection !== "undefined"
             ? action.payload.slideDirection
             : automaticDirection(action.payload.slideIndex),
       };
@@ -48,7 +59,11 @@ const SlideContextProvider = ({
 
   return (
     <SlideContext.Provider value={{ state, dispatch }}>
-      <Transition.Slide className="h-full w-full" from={slideDirection} key={activeSlide}>
+      <Transition.Slide
+        className="h-full w-full"
+        from={slideDirection}
+        key={activeSlide}
+      >
         {React.Children.toArray(slides.props.children)[activeSlide]}
       </Transition.Slide>
       {children}

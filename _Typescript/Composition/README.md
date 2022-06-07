@@ -37,22 +37,27 @@ const ExampleComponent = ({
   );
 };
 
-const { compositionFunction, component } = Composition(ExampleComponent)(props => {
-  type Curr = { TileImage: JSS.ImageField; TileTitle: JSS.TextField };
-  type Acc = { image: Curr['TileImage']; text: Curr['TileTitle'] }[];
+const { compositionFunction, component } = Composition(ExampleComponent)(
+  (props) => {
+    type Curr = { TileImage: JSS.ImageField; TileTitle: JSS.TextField };
+    type Acc = { image: Curr["TileImage"]; text: Curr["TileTitle"] }[];
 
-  const reduceItems = (Tiles: typeof props['fields']): Acc | undefined => {
-    return Tiles?.reduce(
-      (acc: Acc, curr: Curr) => [...acc, { image: curr.TileImage, text: curr.TileTitle }],
-      []
-    );
-  };
-  return {
-    headline: props.fields?.Headline,
-    subhead: props.fields?.Subhead,
-    items: reduceItems(props.fields?.Tiles),
-  };
-});
+    const reduceItems = (Tiles: typeof props["fields"]): Acc | undefined => {
+      return Tiles?.reduce(
+        (acc: Acc, curr: Curr) => [
+          ...acc,
+          { image: curr.TileImage, text: curr.TileTitle },
+        ],
+        []
+      );
+    };
+    return {
+      headline: props.fields?.Headline,
+      subhead: props.fields?.Subhead,
+      items: reduceItems(props.fields?.Tiles),
+    };
+  }
+);
 
 export default component;
 ```
@@ -60,19 +65,24 @@ export default component;
 You could also have the reduce types be 'any' and it will still be fine. Its only as strict as you want it to be.
 
 ```tsx
-const { compositionFunction, component } = Composition(ExampleComponent)(props => {
-  const reduceItems = (Tiles: any) => {
-    return Tiles?.reduce(
-      (acc: any, curr: any) => [...acc, { image: curr.TileImage, text: curr.TileTitle }],
-      []
-    );
-  };
-  return {
-    headline: props.fields?.Headline,
-    subhead: props.fields?.Subhead,
-    items: reduceItems(props.fields?.Tiles),
-  };
-});
+const { compositionFunction, component } = Composition(ExampleComponent)(
+  (props) => {
+    const reduceItems = (Tiles: any) => {
+      return Tiles?.reduce(
+        (acc: any, curr: any) => [
+          ...acc,
+          { image: curr.TileImage, text: curr.TileTitle },
+        ],
+        []
+      );
+    };
+    return {
+      headline: props.fields?.Headline,
+      subhead: props.fields?.Subhead,
+      items: reduceItems(props.fields?.Tiles),
+    };
+  }
+);
 ```
 
 Also it's useful to know that - if you have different requirements - you can pass in alternate Fields type at the callsite...
@@ -84,12 +94,15 @@ const { compositionFunction, component } = Composition(ExampleComponent)<{
     Headline: JSS.TextField;
     Subhead: JSS.TextField;
   };
-}>(props => {
+}>((props) => {
   return {
     headline: props.fields.Headline,
     subhead: props.fields.Subhead,
     items: props.fields.Tiles?.reduce(
-      (acc: any, curr: any) => [...acc, { image: curr.TileImage, text: curr.TileTitle }],
+      (acc: any, curr: any) => [
+        ...acc,
+        { image: curr.TileImage, text: curr.TileTitle },
+      ],
       []
     ),
   };
@@ -103,19 +116,24 @@ The default export is perfect for the app, but in your stories or tests where yo
 Export the compositionFunction as a named export, in addition to the default `component` export
 
 ```tsx
-const { compositionFunction, component } = Composition(ExampleComponent)(props => {
-  const reduceItems = (Tiles: any) => {
-    return Tiles?.reduce(
-      (acc: any, curr: any) => [...acc, { image: curr.TileImage, text: curr.TileTitle }],
-      []
-    );
-  };
-  return {
-    headline: props.fields?.Headline,
-    subhead: props.fields?.Subhead,
-    items: reduceItems(props.fields?.Tiles),
-  };
-});
+const { compositionFunction, component } = Composition(ExampleComponent)(
+  (props) => {
+    const reduceItems = (Tiles: any) => {
+      return Tiles?.reduce(
+        (acc: any, curr: any) => [
+          ...acc,
+          { image: curr.TileImage, text: curr.TileTitle },
+        ],
+        []
+      );
+    };
+    return {
+      headline: props.fields?.Headline,
+      subhead: props.fields?.Subhead,
+      items: reduceItems(props.fields?.Tiles),
+    };
+  }
+);
 
 export { compositionFunction };
 export default component;
@@ -124,17 +142,17 @@ export default component;
 Then import the compositionFunction to your test or story and pass the sitecore data as the argument.
 
 ```tsx
-import { ExampleComponent, compositionFunction } from './index';
-import data from './data';
+import { ExampleComponent, compositionFunction } from "./index";
+import data from "./data";
 
 const props = compositionFunction(data);
 
 export default {
-  title: 'Components/ExampleComponent',
+  title: "Components/ExampleComponent",
   component: ExampleComponent,
 };
 
-const Template = args => <ExampleComponent {...args} />;
+const Template = (args) => <ExampleComponent {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = props;

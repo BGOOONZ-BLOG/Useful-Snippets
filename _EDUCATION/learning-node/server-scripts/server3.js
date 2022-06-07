@@ -13,7 +13,7 @@ app.get("/profile", (req, res) => {
   res.send("getting profile...");
 });
 
-app.post("/profile", ({body}, res) => {
+app.post("/profile", ({ body }, res) => {
   console.log(body);
   const user = {
     name: "bolaji",

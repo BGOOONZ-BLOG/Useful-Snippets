@@ -1,4 +1,4 @@
-import { CarouselProps, TotalSlides } from 'src/components/Carousel/types';
+import { CarouselProps, TotalSlides } from "src/components/Carousel/types";
 
 type CarouselContextProviderType = CarouselProps &
   TotalSlides & {
@@ -20,27 +20,27 @@ interface CarouselContextType {
 
 interface SetNextSlideAction {
   payload: SetNextSlidePayload;
-  type: 'setNextSlide';
+  type: "setNextSlide";
 }
 
 interface SetNextSlidePayload {
   moveSlide: number;
-  slideDirection: State['slideDirection'];
+  slideDirection: State["slideDirection"];
 }
 
 interface SetSlideIndexAction {
   payload: SetSlideIndexPayload;
-  type: 'setSlideIndex';
+  type: "setSlideIndex";
 }
 
 interface SetSlideIndexPayload {
-  slideDirection: State['slideDirection'];
+  slideDirection: State["slideDirection"];
   slideIndex: number;
 }
 
 interface State {
   activeSlide: number;
-  slideDirection: 'forward' | 'backward';
+  slideDirection: "forward" | "backward";
   totalSlides: number;
 }
 

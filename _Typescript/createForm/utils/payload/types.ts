@@ -1,4 +1,7 @@
-import { PFState, PFStateValue } from 'src/components/Form/Progressive/context/types';
+import {
+  PFState,
+  PFStateValue,
+} from "src/components/Form/Progressive/context/types";
 
 interface BuildPayloadFieldsType {
   (state: PFStateValue, data: { [x: string]: any }, condition: string): {

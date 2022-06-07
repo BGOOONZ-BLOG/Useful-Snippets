@@ -1,5 +1,5 @@
-import React from 'react';
-import Logger from 'src/lib/Logger';
+import React from "react";
+import Logger from "src/lib/Logger";
 
 interface Props {
   fallback: JSX.Element;

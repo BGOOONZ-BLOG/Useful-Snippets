@@ -1,8 +1,8 @@
 const getCookies = () => {
   const cookies = () => {
     return document.cookie
-      .split(';')
-      .map(cookie => cookie.split('='))
+      .split(";")
+      .map((cookie) => cookie.split("="))
       .reduce(
         (accumulator, [key, value]) => ({
           ...accumulator,
@@ -11,7 +11,7 @@ const getCookies = () => {
         {}
       );
   };
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     return cookies() as { [key: string]: any };
   } else {
     return null;

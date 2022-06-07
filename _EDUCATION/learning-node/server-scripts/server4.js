@@ -5,7 +5,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ extended: false }));
-app.get("/:id", ({params}, res) => {
+app.get("/:id", ({ params }, res) => {
   // console.log(req.query)
   // req.body
   // console.log(req.header)

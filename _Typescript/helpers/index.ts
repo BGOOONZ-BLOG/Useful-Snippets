@@ -1,4 +1,4 @@
-import pipe from './pipe';
+import pipe from "./pipe";
 import {
   noExtraSpaces,
   onlyUniqueWords,
@@ -10,16 +10,19 @@ import {
   toPascalCase,
   toSnakeCase,
   toTitleCase,
-} from './strings';
-import { maxFlat } from './maxFlat';
-import getCookies from 'src/lib/Cookies';
+} from "./strings";
+import { maxFlat } from "./maxFlat";
+import getCookies from "src/lib/Cookies";
 
 interface A11yActionKeyDownType {
-  (event: React.KeyboardEvent<HTMLElement>, clickHandler: (event?: any) => void): void | null;
+  (
+    event: React.KeyboardEvent<HTMLElement>,
+    clickHandler: (event?: any) => void
+  ): void | null;
 }
 
 const a11yActionKeyDown: A11yActionKeyDownType = ({ code }, clickHandler) => {
-  if (code !== 'Enter' && code !== 'NumpadEnter') return null;
+  if (code !== "Enter" && code !== "NumpadEnter") return null;
   return clickHandler();
 };
 
@@ -27,8 +30,9 @@ const a11yActionKeyDown: A11yActionKeyDownType = ({ code }, clickHandler) => {
 // use this if using a div or span with a click handler ie: <span {...a11yAction(clickHandler)}>click me</span>
 const a11yAction = (clickHandler: (event?: any) => void) => ({
   onClick: clickHandler,
-  onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => a11yActionKeyDown(event, clickHandler),
-  role: 'button',
+  onKeyDown: (event: React.KeyboardEvent<HTMLElement>) =>
+    a11yActionKeyDown(event, clickHandler),
+  role: "button",
   tabIndex: 0,
 });
 
@@ -44,7 +48,10 @@ const a11yAction = (clickHandler: (event?: any) => void) => ({
 const createStoryOptions = (arr: Array<any>, amount?: number) => {
   const optionsArray: Array<any> = amount ? arr.slice(0, amount) : arr;
   return optionsArray.reduce(
-    (acc, _, index, source) => ({ [index + 1]: source.slice(0, index + 1), ...acc }),
+    (acc, _, index, source) => ({
+      [index + 1]: source.slice(0, index + 1),
+      ...acc,
+    }),
     {}
   );
 };
@@ -56,27 +63,29 @@ const getSectionSegment = () => {
 };
 
 const getBackgroundColor = (fields?: { [key: string]: any }) => {
-  const bgColor = fields?.backgroundColor || fields?.Background?.fields?.Setting?.value;
-  return bgColor?.toLowerCase() === 'shaded' ? 'gray' : 'white';
+  const bgColor =
+    fields?.backgroundColor || fields?.Background?.fields?.Setting?.value;
+  return bgColor?.toLowerCase() === "shaded" ? "gray" : "white";
 };
 
-const getChild = (source: Array<{ [key: string]: any }>) => (parentId: string) => {
-  return source.filter(child => child?.params?.parent === parentId);
-};
+const getChild =
+  (source: Array<{ [key: string]: any }>) => (parentId: string) => {
+    return source.filter((child) => child?.params?.parent === parentId);
+  };
 
-const formatModalId = (arg = '') =>
+const formatModalId = (arg = "") =>
   pipe(
     stripCurlyBraces,
     removeSpecialCharacters,
-    str => str.replace(/[-#]/gi, ''),
-    str => str.toLowerCase()
+    (str) => str.replace(/[-#]/gi, ""),
+    (str) => str.toLowerCase()
   )(arg);
 
 // Searches the fields in NavCards or CallToAction for 'Modal Triggers' properties to match
 // with a modal component.
 const getModal = (fields: any) => {
-  if (!fields?.['Modal Triggers']?.id) return null;
-  return { id: formatModalId(fields['Modal Triggers'].id) };
+  if (!fields?.["Modal Triggers"]?.id) return null;
+  return { id: formatModalId(fields["Modal Triggers"].id) };
 };
 
 /**
@@ -85,11 +94,11 @@ const getModal = (fields: any) => {
  * @param prefix String 'btn-'
  * @returns 'btn-primary btn-small'
  */
-const makeClasses = (classes: Array<string>, prefix = '') => {
-  if (!classes) return '';
+const makeClasses = (classes: Array<string>, prefix = "") => {
+  if (!classes) return "";
 
   return classes
-    .reduce((acc, prop) => (prop ? `${acc} ${prefix}${prop}` : `${acc}`), '')
+    .reduce((acc, prop) => (prop ? `${acc} ${prefix}${prop}` : `${acc}`), "")
     .toLowerCase()
     .trim();
 };
@@ -114,7 +123,7 @@ const storybookCustomArgs = (
   const keys2 = Object.keys(Component.__docgenInfo.props);
   return keys1
     .concat(keys2)
-    .filter(x => exceptionArr.includes(x) === exclude)
+    .filter((x) => exceptionArr.includes(x) === exclude)
     .reduce((acc, curr) => {
       return { ...acc, [curr]: { table: { disable: true } } };
     }, {});

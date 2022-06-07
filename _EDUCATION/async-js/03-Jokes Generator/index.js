@@ -17,7 +17,7 @@ function getJokes(e) {
       if (number === "") {
         alert("Enter number of jokes first");
       } else if (response.type === "success") {
-        response.value.map(({joke}) => {
+        response.value.map(({ joke }) => {
           output += `<li>${joke}</li>`;
         });
       } else {

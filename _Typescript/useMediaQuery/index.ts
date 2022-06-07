@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from 'react';
-import { screens } from 'src/lib/Theme';
+import { useLayoutEffect, useState } from "react";
+import { screens } from "src/lib/Theme";
 
 type Screens = keyof typeof screens;
 type QueryProps<T> = T extends String ? (T extends Screens ? T : never) : never;
@@ -15,18 +15,17 @@ type QueryProps<T> = T extends String ? (T extends Screens ? T : never) : never;
 // const hasHover = useMediQuery('(hover: hover)');
 
 const agnosticMatchMedia = (query: string) => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return null;
   }
-  const cleanedQuery = query.replace(/@media(\s+screen and)?\s+/g, '');
+  const cleanedQuery = query.replace(/@media(\s+screen and)?\s+/g, "");
   return window.matchMedia(cleanedQuery);
 };
 
-const useMediaQuery: { (mq: Screens): boolean | undefined; (mq: string): boolean | undefined } = <
-  T
->(
-  mq: QueryProps<T>
-) => {
+const useMediaQuery: {
+  (mq: Screens): boolean | undefined;
+  (mq: string): boolean | undefined;
+} = <T>(mq: QueryProps<T>) => {
   // eslint-disable-next-line no-undefined
   const [matches, setMatches] = useState<boolean | undefined>(undefined);
 
@@ -42,9 +41,9 @@ const useMediaQuery: { (mq: Screens): boolean | undefined; (mq: string): boolean
 
     handleUpdate();
 
-    query.addEventListener('change', handleUpdate);
+    query.addEventListener("change", handleUpdate);
     return () => {
-      query.removeEventListener('change', handleUpdate);
+      query.removeEventListener("change", handleUpdate);
     };
   }, [mq]);
 

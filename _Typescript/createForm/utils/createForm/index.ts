@@ -1,20 +1,20 @@
-import { toSnakeCase } from 'src/lib/helpers';
+import { toSnakeCase } from "src/lib/helpers";
 
 // sets input's defaultValue to one of these cookie values:
 // invitationcode, token1, token2, token3, program, ref_id
 const getCookieValue = (fields: any) => {
-  if (typeof window === 'undefined') return '';
+  if (typeof window === "undefined") return "";
 
   const cookieName = fields?.DefaultValueKey?.value;
   const valueArr = fields?.DefaultValueSource?.value;
   const valueType = getSelectedValue(valueArr);
-  const hasCookie = valueType === 'cookie';
+  const hasCookie = valueType === "cookie";
   const cookieValue = document.cookie
-    .split('; ')
-    .find(row => row.startsWith(`${cookieName}=`))
-    ?.split('=')[1];
+    .split("; ")
+    .find((row) => row.startsWith(`${cookieName}=`))
+    ?.split("=")[1];
 
-  return hasCookie && cookieValue ? cookieValue : '';
+  return hasCookie && cookieValue ? cookieValue : "";
 };
 
 const getDatePickerData = (fields: any) => {
@@ -62,7 +62,7 @@ const getItems = (fields: any): Array<any> => {
 };
 
 const getName = (fields: any, title: string) => {
-  if (fields?.GroupName?.value && title !== 'Checkbox List Progressive') {
+  if (fields?.GroupName?.value && title !== "Checkbox List Progressive") {
     return fields.GroupName.value;
   }
 
@@ -76,9 +76,9 @@ const getName = (fields: any, title: string) => {
  * @param arr - The array from fields.ValidationPattern.value
  */
 const getSelectedValue = (arr: Array<any>) => {
-  if (!arr) return '';
+  if (!arr) return "";
 
-  const [selected] = arr.filter(elm => elm.selected);
+  const [selected] = arr.filter((elm) => elm.selected);
   return selected?.value;
 };
 
@@ -94,8 +94,8 @@ const parseItems = (str: string | Array<any>) => {
 // will always be 'yes/no'
 const parsePillToggles = () => {
   return [
-    { text: 'Yes', value: 'Yes' },
-    { text: 'No', value: 'No' },
+    { text: "Yes", value: "Yes" },
+    { text: "No", value: "No" },
   ];
 };
 

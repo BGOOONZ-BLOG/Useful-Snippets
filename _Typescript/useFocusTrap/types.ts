@@ -6,11 +6,11 @@ interface UseFocusTrap {
 }
 
 type FocusTrapProps = React.HTMLAttributes<Element> &
-  Pick<UseFocusTrap, 'shouldTrap' | 'onEnter' | 'onExit'>;
+  Pick<UseFocusTrap, "shouldTrap" | "onEnter" | "onExit">;
 
 type FocusTrapType = (
   props: FocusTrapProps,
-  ref: React.ForwardedRef<UseFocusTrap['container']>
+  ref: React.ForwardedRef<UseFocusTrap["container"]>
 ) => JSX.Element;
 
 export type { FocusTrapProps, UseFocusTrap, FocusTrapType };

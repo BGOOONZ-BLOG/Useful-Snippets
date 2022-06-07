@@ -1,16 +1,16 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import CurrentSlideIndicator from 'src/components/ModalSlideshow/components/CurrentSlideIndicator';
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import CurrentSlideIndicator from "src/components/ModalSlideshow/components/CurrentSlideIndicator";
 import {
   CarouselContextProviderType,
   CarouselContextType,
   SetNextSlideAction,
   SetSlideIndexAction,
   State,
-} from './types';
+} from "./types";
 
 const initialState: State = {
   activeSlide: 0,
-  slideDirection: 'forward',
+  slideDirection: "forward",
   totalSlides: 0,
 };
 
@@ -19,15 +19,18 @@ const CarouselContext = createContext<CarouselContextType>({
   state: initialState,
 });
 
-const CarouselReducer = (state: State, action: SetNextSlideAction | SetSlideIndexAction) => {
+const CarouselReducer = (
+  state: State,
+  action: SetNextSlideAction | SetSlideIndexAction
+) => {
   switch (action.type) {
-    case 'setNextSlide':
+    case "setNextSlide":
       return {
         ...state,
         activeSlide: state.activeSlide + action.payload.moveSlide,
         slideDirection: action.payload.slideDirection,
       };
-    case 'setSlideIndex':
+    case "setSlideIndex":
       return {
         ...state,
         activeSlide: action.payload.slideIndex,
@@ -53,36 +56,44 @@ const CarouselContextProvider = ({
   // A sample from our available durations. Anything faster or slower than these
   // didn't feel right
   const durations = {
-    100: 'duration-100',
-    150: 'duration-150',
-    200: 'duration-200',
-    300: 'duration-300',
-    500: 'duration-500',
+    100: "duration-100",
+    150: "duration-150",
+    200: "duration-200",
+    300: "duration-300",
+    500: "duration-500",
   };
 
   // helpers
-  const isForward = slideDirection === 'forward';
+  const isForward = slideDirection === "forward";
   const lastSlide = totalSlides - 1;
 
   // slide classes
-  const activeClass = 'js-active-slide left-0';
-  const previousClass = `js-previous-slide invisible ${isForward ? '-left-full' : 'left-full'}`;
-  const nextClass = `js-next-slide invisible ${isForward ? 'left-full' : '-left-full'}`;
+  const activeClass = "js-active-slide left-0";
+  const previousClass = `js-previous-slide invisible ${
+    isForward ? "-left-full" : "left-full"
+  }`;
+  const nextClass = `js-next-slide invisible ${
+    isForward ? "left-full" : "-left-full"
+  }`;
   const classVariantOne = isForward ? nextClass : previousClass;
   const classVariantTwo = isForward ? previousClass : nextClass;
   const durationClass = durations[controls?.delay || 300];
 
   // the slide after the active slide but ignored if we're at the end of the stack
-  const slideIsNextButNotLast = (index: number) => index === activeSlide + 1 && index <= lastSlide;
+  const slideIsNextButNotLast = (index: number) =>
+    index === activeSlide + 1 && index <= lastSlide;
 
   // the slide before the active slide but ignored if we're at the beginning of the stack
-  const slideIsPreviousButNotFirst = (index: number) => index === activeSlide - 1 && index >= 0;
+  const slideIsPreviousButNotFirst = (index: number) =>
+    index === activeSlide - 1 && index >= 0;
 
   // first slide, activeSlide is last
-  const slideIsFirstAndActiveIsLast = (index: number) => index === 0 && activeSlide === lastSlide;
+  const slideIsFirstAndActiveIsLast = (index: number) =>
+    index === 0 && activeSlide === lastSlide;
 
   // last slide, activeSlide is first
-  const slideIsLastAndActiveIsFirst = (index: number) => index === lastSlide && activeSlide === 0;
+  const slideIsLastAndActiveIsFirst = (index: number) =>
+    index === lastSlide && activeSlide === 0;
 
   // We need to intercept the children passed in to the context and apply certain styles to them
   // based on where they are in relation to the active slide
@@ -96,12 +107,18 @@ const CarouselContextProvider = ({
             className: `${child.props.className} ${activeClass} ${durationClass}`,
           });
         }
-        if (slideIsNextButNotLast(index) || slideIsFirstAndActiveIsLast(index)) {
+        if (
+          slideIsNextButNotLast(index) ||
+          slideIsFirstAndActiveIsLast(index)
+        ) {
           return React.cloneElement(child, {
             className: `${child.props.className} ${classVariantOne} ${durationClass}`,
           });
         }
-        if (slideIsPreviousButNotFirst(index) || slideIsLastAndActiveIsFirst(index)) {
+        if (
+          slideIsPreviousButNotFirst(index) ||
+          slideIsLastAndActiveIsFirst(index)
+        ) {
           return React.cloneElement(child, {
             className: `${child.props.className} ${classVariantTwo} ${durationClass}`,
           });

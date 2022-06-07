@@ -1,4 +1,4 @@
-import track, { cleanData } from './gtm';
+import track, { cleanData } from "./gtm";
 
 export { cleanData };
 export default track;

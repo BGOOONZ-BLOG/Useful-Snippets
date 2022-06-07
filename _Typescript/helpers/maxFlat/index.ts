@@ -1,4 +1,4 @@
-import { ComponentEvent } from 'src/lib/Analytics/gtm/types';
+import { ComponentEvent } from "src/lib/Analytics/gtm/types";
 
 type inputItems = {
   fields: {
@@ -13,13 +13,15 @@ type outputItems = {
   name: string;
   depth: number;
   childRoutes: string[];
-  page: { value: { text: string; href: string } } & { analytics: ComponentEvent };
+  page: { value: { text: string; href: string } } & {
+    analytics: ComponentEvent;
+  };
   subpages: outputItems;
   position: number[];
 }[];
 
 const isNotJurisdictionMatch = (
-  jurisdictions: inputItems[0]['fields']['Jurisdictions'],
+  jurisdictions: inputItems[0]["fields"]["Jurisdictions"],
   selectedJurisdiction?: string
 ) => {
   // If we don't know the user's jurisdiction, then we don't know if it matches so
@@ -28,20 +30,28 @@ const isNotJurisdictionMatch = (
     return true;
   }
 
-  return jurisdictions.map(ju => ju.fields?.code?.value).indexOf(selectedJurisdiction) < 0;
+  return (
+    jurisdictions
+      .map((ju) => ju.fields?.code?.value)
+      .indexOf(selectedJurisdiction) < 0
+  );
 };
 
 const maxFlat = (max: number, options?: { selectedJurisdiction?: string }) => {
   return function flatItems(
     items: inputItems = [],
     depth = 0,
-    nameArg = '',
-    analyticsLabel = '',
+    nameArg = "",
+    analyticsLabel = "",
     position: number[] = []
   ): outputItems {
     const initial: outputItems = [];
     return items.reduce(
-      (acc, { fields: { Page, items, Jurisdictions }, name = nameArg }, index) => {
+      (
+        acc,
+        { fields: { Page, items, Jurisdictions }, name = nameArg },
+        index
+      ) => {
         if (depth < max) {
           // If the user's selected jurisdiction does not match a value in Jurisdictions,
           // then that item should not be included in the tree.
@@ -57,26 +67,29 @@ const maxFlat = (max: number, options?: { selectedJurisdiction?: string }) => {
           // occurs within the data structure, eg pos = [0, 1] refers to items[0].subpages[1]
           const pos = position.concat(index);
 
-          const label = [analyticsLabel, Page.value.text].filter(Boolean).join(' | ');
+          const label = [analyticsLabel, Page.value.text]
+            .filter(Boolean)
+            .join(" | ");
           return [
             ...acc,
             {
               name,
               depth,
               position: pos,
-              childRoutes: items?.map(({ fields: { Page } }) => Page.value?.href) || [],
+              childRoutes:
+                items?.map(({ fields: { Page } }) => Page.value?.href) || [],
               page: {
                 ...Page,
                 analytics: {
-                  category: 'hamburger_navigation',
+                  category: "hamburger_navigation",
                   label,
                   action: Page?.value?.href,
                   guid: (Page?.value as any)?.id,
-                  event: 'event-click',
+                  event: "event-click",
                 },
               },
               subpages: flatItems(items, depth + 1, name, label, pos).filter(
-                item => item.page?.value
+                (item) => item.page?.value
               ),
             },
           ];

@@ -1,8 +1,6 @@
 {
   "index_name": "algolia_docsearch_action",
-  "start_urls": [
-    "https://aquaimpact.github.io/CovidSusTrackerDocs"
-  ],
+  "start_urls": ["https://aquaimpact.github.io/CovidSusTrackerDocs"],
   "stop_urls": [],
   "selectors": {
     "lvl0": ".doc-content h1",
@@ -13,8 +11,6 @@
     "lvl5": ".doc-content h6",
     "text": ".doc-content p, .doc-content li"
   },
-  "conversation_id": [
-    "1313246279"
-  ],
+  "conversation_id": ["1313246279"],
   "nb_hits": 98
 }

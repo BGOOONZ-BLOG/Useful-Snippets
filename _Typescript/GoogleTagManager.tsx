@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import TagManager from 'react-gtm-module';
-import track from 'src/lib/Analytics';
-import { useAppContext } from 'src/lib/Contexts/AppContext';
-import { getSectionSegment } from './helpers';
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import TagManager from "react-gtm-module";
+import track from "src/lib/Analytics";
+import { useAppContext } from "src/lib/Contexts/AppContext";
+import { getSectionSegment } from "./helpers";
 
 const useTrackRouteChange = () => {
   const location = useLocation();
@@ -13,12 +13,12 @@ const useTrackRouteChange = () => {
   useEffect(() => {
     const currentPage = document.location.pathname + document.location.search;
     if ((window as any).currentPage !== currentPage) {
-      (window as any).prevPage = (window as any).currentPage ?? '';
+      (window as any).prevPage = (window as any).currentPage ?? "";
       (window as any).currentPage = currentPage;
     }
 
     track.navigation({
-      event: 'send-page',
+      event: "send-page",
       page: location.pathname,
       segment: getSectionSegment(),
       jurisdiction,

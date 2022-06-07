@@ -1,6 +1,6 @@
 import http from "http";
 
-const server = http.createServer(({method, url}, res) => {
+const server = http.createServer(({ method, url }, res) => {
   // console.log('headers', req.headers)
   console.log("methods", method);
   console.log("url", url);

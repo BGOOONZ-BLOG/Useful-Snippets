@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 interface TransitionProps extends React.HTMLAttributes<Element> {
   active: boolean;
@@ -10,7 +10,12 @@ const Transition = ({ children }: TransitionProps) => {
   return <div>{children}</div>;
 };
 
-const Height = ({ active, children, className = '', ...rest }: TransitionProps) => {
+const Height = ({
+  active,
+  children,
+  className = "",
+  ...rest
+}: TransitionProps) => {
   const [maxHeight, setMaxHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -28,10 +33,10 @@ const Height = ({ active, children, className = '', ...rest }: TransitionProps) 
       className={`overflow-hidden transition-all ease-in-out ${className}`}
       ref={contentRef}
       style={{
-        transitionDuration: '300ms',
+        transitionDuration: "300ms",
         ...(active
-          ? { maxHeight: `${maxHeight}px`, visibility: 'visible' }
-          : { maxHeight: '0', visibility: 'hidden' }),
+          ? { maxHeight: `${maxHeight}px`, visibility: "visible" }
+          : { maxHeight: "0", visibility: "hidden" }),
       }}
       {...rest}
     >
@@ -40,14 +45,16 @@ const Height = ({ active, children, className = '', ...rest }: TransitionProps) 
   );
 };
 
-const Fade = ({ active, children, className = '' }: TransitionProps) => {
+const Fade = ({ active, children, className = "" }: TransitionProps) => {
   return (
     <div
       aria-hidden={!active}
       className={`overflow-hidden transition-all ease-in-out ${className}`}
       style={{
-        transitionDuration: '300ms',
-        ...(active ? { opactiy: 1, visibility: 'visible' } : { opacity: 0, visibility: 'hidden' }),
+        transitionDuration: "300ms",
+        ...(active
+          ? { opactiy: 1, visibility: "visible" }
+          : { opacity: 0, visibility: "hidden" }),
       }}
     >
       {children}
@@ -55,15 +62,19 @@ const Fade = ({ active, children, className = '' }: TransitionProps) => {
   );
 };
 
-const RevealDown = ({ active, children, className = '' }: TransitionProps) => (
+const RevealDown = ({ active, children, className = "" }: TransitionProps) => (
   <div
     aria-hidden={!active}
     className={`transition-all ease-in-out ${className}`}
     style={{
-      transitionDuration: '350ms',
+      transitionDuration: "350ms",
       ...(active
-        ? { opactiy: 1, transform: 'translateY(0px)', visibility: 'visible' }
-        : { opacity: 0, transform: 'translateY(-200px)', visibility: 'hidden' }),
+        ? { opactiy: 1, transform: "translateY(0px)", visibility: "visible" }
+        : {
+            opacity: 0,
+            transform: "translateY(-200px)",
+            visibility: "hidden",
+          }),
     }}
   >
     {children}
@@ -71,9 +82,9 @@ const RevealDown = ({ active, children, className = '' }: TransitionProps) => (
 );
 
 const Slide = ({
-  className = '',
-  from = '100',
-  to = '0',
+  className = "",
+  from = "100",
+  to = "0",
   ...props
 }: React.PropsWithChildren<{
   className?: string;
@@ -88,11 +99,11 @@ const Slide = ({
   };
 
   useLayoutEffect(() => {
-    document.documentElement.style.setProperty('--slide-to', `${to}%`);
-    document.documentElement.style.setProperty('--slide-from', `${from}%`);
+    document.documentElement.style.setProperty("--slide-to", `${to}%`);
+    document.documentElement.style.setProperty("--slide-from", `${from}%`);
     return () => {
-      document.documentElement.style.removeProperty('--slide-to');
-      document.documentElement.style.removeProperty('--slide-from');
+      document.documentElement.style.removeProperty("--slide-to");
+      document.documentElement.style.removeProperty("--slide-from");
     };
   }, [to, from]);
 
